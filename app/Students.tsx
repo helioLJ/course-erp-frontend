@@ -44,31 +44,34 @@ export default function Students() {
   }
 
   async function fetchData(queryName: string, queryClassId: string) {
+    let tempStudents: Student[] = [] // Variável temporária para armazenar os alunos
+
     switch (true) {
       case queryName !== '' && queryClassId !== '':
-        console.log('ala')
         const { data: data4 } = await api.get(
           `/student?name=${queryName}&classId=${queryClassId}`,
         )
-        setStudents(data4.students)
+        tempStudents = data4.students
         break
       case queryName === '' && queryClassId === '':
         const { data: data1 } = await api.get('/student')
-        setStudents(data1.students)
+        tempStudents = data1.students
         break
       case queryClassId !== '':
         const { data: data2 } = await api.get(
           `/student?classId=${queryClassId}`,
         )
-        setStudents(data2.students)
+        tempStudents = data2.students
         break
       case queryName !== '':
         const { data: data3 } = await api.get(`/student?name=${queryName}`)
-        setStudents(data3.students)
+        tempStudents = data3.students
         break
       default:
         break
     }
+
+    setStudents(tempStudents) // Atualiza o estado com o valor correto
   }
 
   async function fetchClasses() {
