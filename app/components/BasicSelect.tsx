@@ -4,30 +4,63 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { useState } from 'react'
 
-export default function BasicSelect() {
-  const [classname, setClassname] = useState('')
+export interface ClassesType {
+  id: string
+  name: string
+  start_day: string
+  end_day: string
+  period: string
+}
 
+interface BasicSelectProps {
+  value: { name: string; id: string }
+  onChange: any
+  data: ClassesType[]
+}
+
+export default function BasicSelect({
+  value,
+  onChange,
+  data,
+}: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
-    setClassname(event.target.value as string)
+    const selectedName = event.target.value as string
+    if (selectedName === 'Todas' || selectedName === '') {
+      onChange({ name: selectedName, id: '' })
+      return
+    }
+    const selectedClass = data.find(
+      (classObj: ClassesType) => classObj.name === selectedName,
+    )
+
+    if (selectedClass) {
+      const { id } = selectedClass
+      onChange({ name: selectedName, id })
+    }
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Turma</InputLabel>
+        <InputLabel className="dark:text-white" id="demo-simple-select-label">
+          Turma
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={classname}
+          value={value.name}
           label="Turma"
           onChange={handleChange}
+          className="dark:text-white"
         >
-          <MenuItem value={5}>Todas</MenuItem>
-          <MenuItem value={10}>Turma 5</MenuItem>
-          <MenuItem value={20}>Turma 6</MenuItem>
-          <MenuItem value={30}>Turma 7</MenuItem>
+          <MenuItem value="Todas">Todas</MenuItem>
+          {data &&
+            data.map((classObj: ClassesType) => (
+              <MenuItem key={classObj.id} value={classObj.name}>
+                {classObj.name}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>

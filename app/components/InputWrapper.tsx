@@ -2,12 +2,16 @@ interface InputWrapperProps {
   label: string
   placeholder: string
   type: string
+  value: string
+  onChange: any
 }
 
 export default function InputWrapper({
   label,
   placeholder,
   type,
+  value,
+  onChange,
 }: InputWrapperProps) {
   return (
     <div className="flex flex-col gap-2 text-left">
@@ -17,6 +21,8 @@ export default function InputWrapper({
         placeholder={placeholder}
         name={label}
         type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   )

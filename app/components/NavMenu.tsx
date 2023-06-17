@@ -1,28 +1,64 @@
+'use client'
 import { User } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import ResponsiveMenu from './ResponsiveMenu'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function NavMenu() {
+  const { data: session } = useSession()
+  const pathname = usePathname()
+
   return (
     <header className="mb-9 flex items-center justify-between gap-2">
       <nav className="hidden w-fit overflow-hidden rounded-lg border-2 border-gray-200 lg:block">
         <ul className="flex w-auto flex-wrap gap-4 bg-white px-6 text-zinc-400">
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
+          <li
+            className={`${
+              pathname === '/' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
+            <Link href="/">Alunos</Link>
+          </li>
+          <li
+            className={`${
+              pathname === '/payments' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
             <Link href="#">Pagamentos</Link>
           </li>
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
+          <li
+            className={`${
+              pathname === '/grades' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
             <Link href="#">Notas</Link>
           </li>
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
-            <Link href="#">Alunos</Link>
-          </li>
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
+          <li
+            className={`${
+              pathname === '/teachers' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
             <Link href="#">Professores</Link>
           </li>
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
+          <li
+            className={`${
+              pathname === '/classes' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
             <Link href="#">Turmas</Link>
           </li>
-          <li className="flex h-9 items-center px-5 transition-colors hover:text-green-500">
+          <li
+            className={`${
+              pathname === '/subjects' &&
+              'border-b-2 border-green-500 font-bold text-zinc-800'
+            } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
+          >
             <Link href="#">Disciplinas</Link>
           </li>
         </ul>
@@ -35,9 +71,12 @@ export default function NavMenu() {
           <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-zinc-800">
             <User />
           </div>
-          <p className="font-bold">Administrador</p>
+          <p className="font-bold">{session?.user?.name}</p>
         </div>
-        <button className="rounded-md bg-zinc-400 px-6 py-3 font-bold text-white transition-opacity hover:opacity-70">
+        <button
+          onClick={() => signOut()}
+          className="rounded-md bg-zinc-400 px-6 py-3 font-bold text-white transition-opacity hover:opacity-70"
+        >
           Sair
         </button>
       </div>

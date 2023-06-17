@@ -1,8 +1,29 @@
-import { Banknote, Eye, GraduationCap, Pencil } from 'lucide-react'
-import DefaultCell from './components/DefaultCell'
-import Link from 'next/link'
+import StudentRow from './StudentRow'
+import { api } from './lib/api'
 
-export default function StudentsTable() {
+interface Student {
+  id: string
+  email: string
+  password: string
+  name: string
+  status: string
+  phone: string
+  birthday: string
+  CPF: string
+  RG: string
+  address: string
+  father: string
+  mother: string
+  observations: string
+  registration_day: string
+  classId: string
+  class: {
+    name: string
+  }
+}
+
+export default async function StudentsTable() {
+  const { data } = await api.get('/student')
   return (
     <div className="rounded-lg border-x-2 border-gray-200">
       <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
@@ -18,68 +39,16 @@ export default function StudentsTable() {
           </tr>
         </thead>
         <tbody className="block lg:table-row-group">
-          <tr className="mb-4 block border-y-2 border-gray-200 bg-white lg:table-row">
-            <DefaultCell label="Nome">George Lindelof</DefaultCell>
-            <DefaultCell label="Turma">Turma 5</DefaultCell>
-            <DefaultCell label="Telefon">(91) 98334-3443</DefaultCell>
-            <DefaultCell label="Email">example@email.com</DefaultCell>
-            <DefaultCell label="Status">
-              <p className="rounded-full bg-green-200 px-4 py-1 text-center text-green-500">
-                Em dias
-              </p>
-            </DefaultCell>
-            <DefaultCell label="Operações">
-              <div className="flex items-center justify-end gap-4 lg:justify-start">
-                <button>
-                  <Eye className="text-green-500" />
-                </button>
-                <button>
-                  <Pencil className="text-green-500" />
-                </button>
-              </div>
-            </DefaultCell>
-            <DefaultCell label="Links">
-              <div className="flex items-center justify-end gap-4 lg:justify-start">
-                <Link href="#">
-                  <Banknote className="text-zinc-400" />
-                </Link>
-                <Link href="#">
-                  <GraduationCap className="text-zinc-400" />
-                </Link>
-              </div>
-            </DefaultCell>
-          </tr>
-          <tr className="mb-4 block border-y-2 border-gray-200 bg-white lg:table-row">
-            <DefaultCell label="Nome">George Lindelof</DefaultCell>
-            <DefaultCell label="Turma">Turma 5</DefaultCell>
-            <DefaultCell label="Telefon">(91) 98334-3443</DefaultCell>
-            <DefaultCell label="Email">example@email.com</DefaultCell>
-            <DefaultCell label="Status">
-              <p className="rounded-full bg-red-200 px-4 py-1 text-center text-red-500">
-                Pendente
-              </p>
-            </DefaultCell>
-            <DefaultCell label="Operações">
-              <div className="flex items-center justify-end gap-4 lg:justify-start">
-                <button>
-                  <Eye className="text-green-500" />
-                </button>
-                <button>
-                  <Pencil className="text-green-500" />
-                </button>
-              </div>
-            </DefaultCell>
-            <DefaultCell label="Links">
-              <div className="flex items-center justify-end gap-4 lg:justify-start">
-                <Link href="#">
-                  <Banknote className="text-zinc-400" />
-                </Link>
-                <Link href="#">
-                  <GraduationCap className="text-zinc-400" />
-                </Link>
-              </div>
-            </DefaultCell>
-          </tr>
+          {!!data.students &&
+            data.students.map((student: Student) => (
+              <StudentRow
+                key={student.id}
+                name={student.name}
+                className={student.class.name}
+                email={student.email}
+                phone={student.phone}
+              />
+            ))}
         </tbody>
       </table>
     </div>
