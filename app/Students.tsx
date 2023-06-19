@@ -8,7 +8,7 @@ import { api } from './lib/api'
 import StudentRow from './StudentRow'
 import { NewStudentModal } from './NewStudentModal'
 
-interface Student {
+export interface Student {
   id: string
   email: string
   password: string
@@ -22,6 +22,7 @@ interface Student {
   father: string
   mother: string
   observations: string
+  registration_number: number
   registration_day: string
   classId: string
   class: {
@@ -120,7 +121,7 @@ export default function Students() {
               <th className="p-4">Telefone</th>
               <th className="p-4">Email</th>
               <th className="p-4">Status</th>
-              <th className="p-4">Operações</th>
+              <th className="p-4">Detalhes</th>
               <th className="p-4">Links</th>
             </tr>
           </thead>
@@ -129,6 +130,7 @@ export default function Students() {
               students.map((student: Student) => (
                 <StudentRow
                   key={student.id}
+                  id={student.id}
                   name={student.name}
                   className={student.class.name}
                   email={student.email}

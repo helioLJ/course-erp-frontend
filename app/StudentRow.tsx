@@ -1,14 +1,17 @@
-import { Banknote, Eye, GraduationCap, Pencil } from 'lucide-react'
+'use client'
+import { Banknote, Eye, GraduationCap } from 'lucide-react'
 import DefaultCell from './components/DefaultCell'
 import Link from 'next/link'
+import { useState } from 'react'
+import { StudentDetailsModal } from './StudentDetailsModal'
 
 interface StudentRowProps {
   name: string
   className: string
   phone: string
   email: string
+  id: string
   // status: string
-  // id: string
 }
 
 export default function StudentRow({
@@ -16,7 +19,10 @@ export default function StudentRow({
   className,
   phone,
   email,
+  id,
 }: StudentRowProps) {
+  const [detailsOpen, setDetailsOpen] = useState(false)
+
   return (
     <tr className="mb-4 block border-y-2 border-gray-200 bg-white dark:text-zinc-800 lg:table-row">
       <DefaultCell label="Nome">{name}</DefaultCell>
@@ -28,14 +34,23 @@ export default function StudentRow({
           Em dias
         </p>
       </DefaultCell>
-      <DefaultCell label="Operações">
+      <DefaultCell label="Detalhes">
         <div className="flex items-center justify-end gap-4 lg:justify-start">
-          <button>
+          <button
+            onClick={() => {
+              setDetailsOpen(true)
+            }}
+          >
             <Eye className="text-green-500" />
           </button>
-          <button>
+          <StudentDetailsModal
+            modal={detailsOpen}
+            setOpenModal={setDetailsOpen}
+            studentId={id}
+          />
+          {/* <button>
             <Pencil className="text-green-500" />
-          </button>
+          </button> */}
         </div>
       </DefaultCell>
       <DefaultCell label="Links">

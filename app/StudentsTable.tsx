@@ -1,26 +1,6 @@
 import StudentRow from './StudentRow'
+import { Student } from './Students'
 import { api } from './lib/api'
-
-interface Student {
-  id: string
-  email: string
-  password: string
-  name: string
-  status: string
-  phone: string
-  birthday: string
-  CPF: string
-  RG: string
-  address: string
-  father: string
-  mother: string
-  observations: string
-  registration_day: string
-  classId: string
-  class: {
-    name: string
-  }
-}
 
 export default async function StudentsTable() {
   const { data } = await api.get('/student')
@@ -34,7 +14,7 @@ export default async function StudentsTable() {
             <th className="p-4">Telefone</th>
             <th className="p-4">Email</th>
             <th className="p-4">Status</th>
-            <th className="p-4">Operações</th>
+            <th className="p-4">Detalhes</th>
             <th className="p-4">Links</th>
           </tr>
         </thead>
@@ -43,6 +23,7 @@ export default async function StudentsTable() {
             data.students.map((student: Student) => (
               <StudentRow
                 key={student.id}
+                id={student.id}
                 name={student.name}
                 className={student.class.name}
                 email={student.email}
