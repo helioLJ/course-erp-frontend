@@ -64,6 +64,12 @@ export function StudentEditForm({
           label="Telefone"
           value={newStudentData.phone}
         />
+        <IndividualDataForm
+          onChange={(value: string) => handleFieldChange('status', value)}
+          label="Status"
+          value={studentData.status}
+          selectStatus
+        />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm

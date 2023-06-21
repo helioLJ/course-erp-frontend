@@ -13,6 +13,7 @@ interface IndividualDataFormProps {
   date?: boolean
   textarea?: boolean
   select?: boolean
+  selectStatus?: boolean
   onChange: any
 }
 
@@ -24,9 +25,11 @@ export function IndividualDataForm({
   onChange,
   textarea,
   select,
+  selectStatus,
 }: IndividualDataFormProps) {
   const [show, setShow] = useState(false)
   const [classes, setClasses] = useState<ClassesType[]>([])
+  const [status, setStatus] = useState('')
   const [classname, setClassname] = useState<{ name: string; id: string }>({
     name: '',
     id: '',
@@ -112,6 +115,19 @@ export function IndividualDataForm({
                   {classObj.name}
                 </option>
               ))}
+          </select>
+        ) : selectStatus ? (
+          <select
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option selected value="Matriculado">
+              Matriculado
+            </option>
+            <option value="Terminou">Terminou</option>
+            <option value="Trancou">Trancou</option>
+            <option value="Desistente">Desistente</option>
           </select>
         ) : (
           <input

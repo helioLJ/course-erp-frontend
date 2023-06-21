@@ -91,7 +91,7 @@ export default function StudentDetails({
                 />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Status" value="A definir" />
+                <IndividualData label="Status" value={studentData.status} />
                 <IndividualData label="Telefone" value={studentData.phone} />
               </div>
               <div className="flex w-full">

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Fade from '@mui/material/Fade'
 import { FormEvent } from 'react'
-import Button from '../Common/Button'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,10 +61,18 @@ export function ConfirmDeleteModal({
                 o dado permanentemente.
               </p>
               <div className="flex gap-4">
-                <button className="w-full rounded-xl bg-zinc-400 p-3 font-bold text-white">
+                <button
+                  type="button"
+                  className="w-full rounded-xl bg-zinc-400 p-3 font-bold text-white"
+                >
                   Cancelar
                 </button>
-                <Button value="Deletar" type="submit" />
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-red-500 p-3 font-bold text-white"
+                >
+                  Deletar
+                </button>
               </div>
             </form>
           </Box>

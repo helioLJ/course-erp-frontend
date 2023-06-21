@@ -38,7 +38,7 @@ export function NewStudentModal({
     email: '',
     password: '',
     name: '',
-    status: '',
+    status: 'Matriculado',
     phone: '',
     birthday: '',
     CPF: '',
