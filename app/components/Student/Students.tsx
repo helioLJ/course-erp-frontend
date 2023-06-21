@@ -102,7 +102,6 @@ export default function Students() {
                   className={student.class.name}
                   email={student.email}
                   phone={student.phone}
-                  currentOpenId={currentOpenId}
                   setCurrentOpenId={setCurrentOpenId}
                 />
               ))}

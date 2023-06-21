@@ -72,6 +72,8 @@ export default function StudentDetails({
               editing={editing}
               setEditing={setEditing}
               handleClose={handleClose}
+              updateTable={updateTable}
+              studendId={studentData.id}
             />
           </div>
           {!editing ? (

@@ -65,7 +65,6 @@ export function NewStudentModal({
     event.preventDefault()
     createStudent(studentData)
     setOpenModal()
-    // updateStudent(studentData)
   }
 
   return (

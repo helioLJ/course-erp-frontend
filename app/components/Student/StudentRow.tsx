@@ -12,7 +12,6 @@ interface StudentRowProps {
   phone: string
   email: string
   id: string
-  currentOpenId: string
   setCurrentOpenId: Dispatch<SetStateAction<string>>
 }
 
@@ -22,7 +21,6 @@ export default function StudentRow({
   phone,
   email,
   id,
-  currentOpenId,
   setCurrentOpenId,
 }: StudentRowProps) {
   // const [status, setStatus] = useState('Em dias')
