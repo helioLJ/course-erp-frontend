@@ -9,6 +9,7 @@ interface IndividualDataProps {
   value: string | number
   password?: boolean
   date?: boolean
+  textarea?: boolean
 }
 
 export function IndividualData({
@@ -16,6 +17,7 @@ export function IndividualData({
   value,
   password,
   date,
+  textarea,
 }: IndividualDataProps) {
   const [show, setShow] = useState(false)
 
@@ -26,7 +28,9 @@ export function IndividualData({
   }
 
   return (
-    <div className="flex w-1/2 flex-col items-center">
+    <div
+      className={`${textarea ? 'w-full' : 'w-1/2'} flex flex-col items-center`}
+    >
       <strong>{label}</strong>
       <p className={`${password ? 'flex items-center gap-4' : null}`}>
         {date ? (

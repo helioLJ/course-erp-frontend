@@ -1,6 +1,7 @@
-import Students from './Students'
 import { getServerSession } from 'next-auth'
 import { authOptions } from './utils/authOptions'
+
+import Students from './components/Student/Students'
 import SignIn from './signin/page'
 
 export default async function Home() {

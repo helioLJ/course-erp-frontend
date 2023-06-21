@@ -1,8 +1,8 @@
 'use client'
-import Button from '@/app/components/Button'
-import InputWrapper from '@/app/components/InputWrapper'
 import { signIn } from 'next-auth/react'
 import { FormEvent, useState } from 'react'
+import InputWrapper from '../components/Common/InputWrapper'
+import Button from '../components/Common/Button'
 
 export default function SignIn() {
   const [email, setEmail] = useState('')
@@ -17,10 +17,9 @@ export default function SignIn() {
   }
 
   return (
-    <div className="grid h-screen place-items-center p-2">
+    <div className="grid h-[calc(100vh-60px)] place-items-center overflow-hidden">
       <main className="w-full max-w-md space-y-12 text-center">
         <div>
-          {/* <Image alt="" /> */}
           <h1 className="text-4xl font-extrabold">LOGO</h1>
           <h1 className="text-2xl font-extralight">Portal Trilogia</h1>
         </div>

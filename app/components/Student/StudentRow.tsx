@@ -1,9 +1,10 @@
 'use client'
-import { Banknote, Eye, GraduationCap } from 'lucide-react'
-import DefaultCell from './components/DefaultCell'
+import { Dispatch, SetStateAction } from 'react'
 import Link from 'next/link'
-import { useState } from 'react'
-import { StudentDetailsModal } from './StudentDetailsModal'
+
+import { Banknote, Eye, GraduationCap } from 'lucide-react'
+
+import DefaultCell from '../Common/DefaultCell'
 
 interface StudentRowProps {
   name: string
@@ -11,7 +12,8 @@ interface StudentRowProps {
   phone: string
   email: string
   id: string
-  // status: string
+  currentOpenId: string
+  setCurrentOpenId: Dispatch<SetStateAction<string>>
 }
 
 export default function StudentRow({
@@ -20,8 +22,10 @@ export default function StudentRow({
   phone,
   email,
   id,
+  currentOpenId,
+  setCurrentOpenId,
 }: StudentRowProps) {
-  const [detailsOpen, setDetailsOpen] = useState(false)
+  // const [status, setStatus] = useState('Em dias')
 
   return (
     <tr className="mb-4 block border-y-2 border-gray-200 bg-white dark:text-zinc-800 lg:table-row">
@@ -31,26 +35,18 @@ export default function StudentRow({
       <DefaultCell label="Email">{email}</DefaultCell>
       <DefaultCell label="Status">
         <p className="rounded-full bg-green-200 px-4 py-1 text-center text-green-500">
-          Em dias
+          Status
         </p>
       </DefaultCell>
       <DefaultCell label="Detalhes">
         <div className="flex items-center justify-end gap-4 lg:justify-start">
           <button
             onClick={() => {
-              setDetailsOpen(true)
+              setCurrentOpenId(id)
             }}
           >
             <Eye className="text-green-500" />
           </button>
-          <StudentDetailsModal
-            modal={detailsOpen}
-            setOpenModal={setDetailsOpen}
-            studentId={id}
-          />
-          {/* <button>
-            <Pencil className="text-green-500" />
-          </button> */}
         </div>
       </DefaultCell>
       <DefaultCell label="Links">

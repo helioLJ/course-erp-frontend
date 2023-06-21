@@ -1,6 +1,6 @@
+import { StudentType } from '@/app/types/student'
 import StudentRow from './StudentRow'
-import { Student } from './Students'
-import { api } from './lib/api'
+import { api } from '@/app/lib/api'
 
 export default async function StudentsTable() {
   const { data } = await api.get('/student')
@@ -20,7 +20,7 @@ export default async function StudentsTable() {
         </thead>
         <tbody className="block lg:table-row-group">
           {!!data.students &&
-            data.students.map((student: Student) => (
+            data.students.map((student: StudentType) => (
               <StudentRow
                 key={student.id}
                 id={student.id}

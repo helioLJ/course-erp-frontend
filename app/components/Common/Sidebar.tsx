@@ -2,7 +2,7 @@
 import { ChevronsLeftRight, Command, Sheet } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Logo from '../../public/logotrilogia.png'
+import Logo from '../../../public/logotrilogia.png'
 import Image from 'next/image'
 
 export default function Sidebar() {

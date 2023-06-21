@@ -10,8 +10,8 @@ export default function NavMenu() {
   const pathname = usePathname()
 
   return (
-    <header className="mb-9 flex items-center justify-between gap-2">
-      <nav className="hidden w-fit overflow-hidden rounded-lg border-2 border-gray-200 lg:block">
+    <header className="absolute left-0 right-0 top-0 flex items-center justify-between gap-2 border-b-2 border-gray-200 bg-white px-7 py-4 md:px-28">
+      <nav className="hidden w-fit overflow-hidden lg:block">
         <ul className="flex w-auto flex-wrap gap-4 bg-white px-6 text-zinc-400">
           <li
             className={`${

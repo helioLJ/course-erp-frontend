@@ -1,7 +1,7 @@
+import { authOptions } from '@/app/utils/authOptions'
 import { getServerSession } from 'next-auth'
-import NavMenu from './components/NavMenu'
-import Sidebar from './components/Sidebar'
-import { authOptions } from './utils/authOptions'
+import NavMenu from './NavMenu'
+import Sidebar from './Sidebar'
 
 export default async function Hud() {
   const session = await getServerSession(authOptions)
