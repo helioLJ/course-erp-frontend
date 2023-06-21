@@ -15,12 +15,14 @@ export function StudentEditForm({
 }: StudentEditFormProps) {
   const [newStudentData, setNewStudentData] = useState<StudentType>(studentData)
 
-  const handleFieldChange = (fieldName: string, newValue: string) => {
+  const handleFieldChange = (fieldName: string, newValue: string | number) => {
+    if (fieldName === 'registration_number') {
+      newValue = Number(newValue)
+    }
     setNewStudentData((prevState) => ({
       ...prevState,
       [fieldName]: newValue,
     }))
-    console.log(studentData)
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -40,10 +42,7 @@ export function StudentEditForm({
           onChange={(value: string) => handleFieldChange('classId', value)}
           label="Turma"
           value={newStudentData.classId}
-          select={{
-            name: newStudentData.class.name,
-            id: newStudentData.classId,
-          }}
+          select
         />
       </div>
       <div className="flex w-full justify-between gap-4">

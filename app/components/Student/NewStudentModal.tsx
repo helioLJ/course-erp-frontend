@@ -24,9 +24,14 @@ const style = {
 interface NewStudentModalProps {
   setOpenModal: any
   modal: boolean
+  createStudent: (studentData: {}) => Promise<void>
 }
 
-export function NewStudentModal({ setOpenModal, modal }: NewStudentModalProps) {
+export function NewStudentModal({
+  setOpenModal,
+  modal,
+  createStudent,
+}: NewStudentModalProps) {
   const handleClose = () => setOpenModal(false)
 
   const [studentData, setStudentData] = useState({
@@ -46,7 +51,10 @@ export function NewStudentModal({ setOpenModal, modal }: NewStudentModalProps) {
     registration_number: 0,
     classId: '',
   })
-  const handleFieldChange = (fieldName: string, newValue: string) => {
+  const handleFieldChange = (fieldName: string, newValue: string | number) => {
+    if (fieldName === 'registration_number') {
+      newValue = Number(newValue)
+    }
     setStudentData((prevState) => ({
       ...prevState,
       [fieldName]: newValue,
@@ -55,6 +63,8 @@ export function NewStudentModal({ setOpenModal, modal }: NewStudentModalProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    createStudent(studentData)
+    setOpenModal()
     // updateStudent(studentData)
   }
 
@@ -88,6 +98,7 @@ export function NewStudentModal({ setOpenModal, modal }: NewStudentModalProps) {
                   }
                   label="Turma"
                   value={studentData.classId}
+                  select
                 />
               </div>
               <div className="flex w-full justify-between gap-4">

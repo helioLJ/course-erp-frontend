@@ -3,7 +3,7 @@ import { Eye } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
-import BasicSelect, { ClassesType } from './BasicSelect'
+import { ClassesType } from './BasicSelect'
 import { api } from '@/app/lib/api'
 
 interface IndividualDataFormProps {
@@ -12,7 +12,7 @@ interface IndividualDataFormProps {
   password?: boolean
   date?: boolean
   textarea?: boolean
-  select?: { name: string; id: string }
+  select?: boolean
   onChange: any
 }
 
@@ -36,6 +36,12 @@ export function IndividualDataForm({
 
   if (date) {
     initialValue = dayjs(value, 'YYYY/MM/DD').format('YYYY-MM-DD')
+  }
+
+  function changeSelect(className: string) {
+    const desiredClass: any = classes.find((item) => item.name === className)
+    onChange(desiredClass.id)
+    setClassname({ name: className, id: desiredClass.id })
   }
 
   function showPassword() {
@@ -89,17 +95,24 @@ export function IndividualDataForm({
         ) : textarea ? (
           <textarea
             className="w-full resize-none rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
+            defaultValue={initialValue}
             onChange={(e) => onChange(e.target.value)}
           />
         ) : select ? (
-          <BasicSelect
-            value={classname}
-            onChange={setClassname}
-            data={classes}
-            initialValue={select}
-            all={false}
-          />
+          <select
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            value={classname.name}
+            onChange={(e) => {
+              changeSelect(e.target.value)
+            }}
+          >
+            {classes &&
+              classes.map((classObj: ClassesType) => (
+                <option key={classObj.id} value={classObj.name}>
+                  {classObj.name}
+                </option>
+              ))}
+          </select>
         ) : (
           <input
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"

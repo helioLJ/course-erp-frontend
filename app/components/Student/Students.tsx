@@ -59,6 +59,11 @@ export default function Students() {
     setClasses(data.classes)
   }
 
+  async function createStudent(studentData: {}) {
+    await api.post(`/student`, studentData)
+    fetchData('', '')
+  }
+
   useEffect(() => {
     fetchData(queryName, classname.id)
     fetchClasses()
@@ -67,9 +72,7 @@ export default function Students() {
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 mt-36 flex items-center justify-between gap-5">
-        <div className="w-full max-w-[500px]">
-          <SearchField value={queryName} onChange={setQueryName} />
-        </div>
+        <SearchField value={queryName} onChange={setQueryName} />
         <BasicSelect value={classname} onChange={setClassname} data={classes} />
         <div className="w-full max-w-[150px]">
           <Button
@@ -81,6 +84,7 @@ export default function Students() {
             <NewStudentModal
               modal={openStudentModal}
               setOpenModal={setOpenStudentModal}
+              createStudent={createStudent}
             />
           )}
         </div>
@@ -102,13 +106,13 @@ export default function Students() {
                   setCurrentOpenId={setCurrentOpenId}
                 />
               ))}
-            <StudentDetails
-              detailsOpenId={currentOpenId}
-              setDetailsOpenId={setCurrentOpenId}
-              updateTable={fetchData}
-            />
           </tbody>
         </table>
+        <StudentDetails
+          detailsOpenId={currentOpenId}
+          setDetailsOpenId={setCurrentOpenId}
+          updateTable={fetchData}
+        />
       </div>
     </div>
   )

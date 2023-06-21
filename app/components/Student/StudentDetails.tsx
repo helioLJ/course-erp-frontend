@@ -78,7 +78,7 @@ export default function StudentDetails({
             <>
               <div className="pb-6 text-center">
                 <h1 className="text-3xl font-bold">{studentData.name}</h1>
-                <span className="text-zinc-400">{studentData.classId}</span>
+                <span className="text-zinc-400">{studentData.class.name}</span>
               </div>
               <div className="flex w-full">
                 <IndividualData label="Email" value={studentData.email} />
