@@ -5,13 +5,14 @@ import { api } from '@/app/lib/api'
 import { StudentType } from '@/app/types/student'
 import { useEffect, useState } from 'react'
 import { NewStudentModal } from './NewStudentModal'
-import StudentRow from './StudentRow'
 import { StudentTHead } from './StudentTHead'
 import SearchField from '../Common/SearchField'
 import BasicSelect, { ClassesType } from '../Common/BasicSelect'
 import Button from '../Common/Button'
 import StudentDetails from './StudentDetails'
 import { toast } from 'react-hot-toast'
+import { StudentTBody } from './StudentTBody'
+import { StudentTBodySkeleton } from './StudentTBodySkeleton'
 
 export default function Students() {
   const [openStudentModal, setOpenStudentModal] = useState(false)
@@ -23,8 +24,10 @@ export default function Students() {
     id: '',
   })
   const [currentOpenId, setCurrentOpenId] = useState('')
+  const [loading, setLoading] = useState(true) // Adicionando estado de loading
 
   async function fetchData(queryName: string, queryClassId: string) {
+    setLoading(true) // Define o estado de loading como true
     let tempStudents: StudentType[] = []
 
     switch (true) {
@@ -53,6 +56,7 @@ export default function Students() {
     }
 
     setStudents(tempStudents)
+    setLoading(false) // Define o estado de loading como false após o carregamento dos dados
   }
 
   async function fetchClasses() {
@@ -108,20 +112,14 @@ export default function Students() {
       <div className="rounded-lg border-x-2 border-gray-200">
         <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
           <StudentTHead />
-          <tbody className="block lg:table-row-group">
-            {!!students &&
-              students.map((student: StudentType) => (
-                <StudentRow
-                  key={student.id}
-                  id={student.id}
-                  name={student.name}
-                  className={student.class.name}
-                  email={student.email}
-                  phone={student.phone}
-                  setCurrentOpenId={setCurrentOpenId}
-                />
-              ))}
-          </tbody>
+          {loading ? (
+            <StudentTBodySkeleton />
+          ) : (
+            <StudentTBody
+              students={students}
+              setCurrentOpenId={setCurrentOpenId}
+            />
+          )}
         </table>
         <StudentDetails
           detailsOpenId={currentOpenId}
