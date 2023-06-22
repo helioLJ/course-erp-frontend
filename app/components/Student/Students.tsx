@@ -11,6 +11,7 @@ import SearchField from '../Common/SearchField'
 import BasicSelect, { ClassesType } from '../Common/BasicSelect'
 import Button from '../Common/Button'
 import StudentDetails from './StudentDetails'
+import { toast } from 'react-hot-toast'
 
 export default function Students() {
   const [openStudentModal, setOpenStudentModal] = useState(false)
@@ -60,8 +61,23 @@ export default function Students() {
   }
 
   async function createStudent(studentData: {}) {
-    await api.post(`/student`, studentData)
-    fetchData('', '')
+    async function postStudent() {
+      await api.post(`/student`, studentData)
+    }
+
+    try {
+      const myPromise = postStudent()
+      toast.promise(myPromise, {
+        loading: 'Criando...',
+        success: 'Estudante criado!',
+        error: 'Houve um erro!',
+      })
+      await myPromise // Aguarda a conclusão da criação do estudante
+      setOpenStudentModal(false)
+      await fetchData('', '') // Aguarda a atualização da tabela
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {

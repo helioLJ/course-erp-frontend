@@ -44,8 +44,10 @@ export default function StudentDetails({
   const handleClose = () => setDetailsOpenId('')
 
   async function fetchData() {
-    const { data } = await api.get(`/student/${detailsOpenId}`)
-    setStudentData(data.student)
+    if (detailsOpenId !== '') {
+      const { data } = await api.get(`/student/${detailsOpenId}`)
+      setStudentData(data.student)
+    }
   }
 
   async function updateStudent(studentData: StudentType) {

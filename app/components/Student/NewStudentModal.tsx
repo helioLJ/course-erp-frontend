@@ -6,6 +6,7 @@ import Fade from '@mui/material/Fade'
 import { useState, FormEvent } from 'react'
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import Button from '../Common/Button'
+import { toast } from 'react-hot-toast'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -24,7 +25,7 @@ const style = {
 interface NewStudentModalProps {
   setOpenModal: any
   modal: boolean
-  createStudent: (studentData: {}) => Promise<void>
+  createStudent: (studentData: {}) => void
 }
 
 export function NewStudentModal({
@@ -63,8 +64,16 @@ export function NewStudentModal({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (
+      studentData.name === '' ||
+      studentData.email === '' ||
+      studentData.password === '' ||
+      studentData.classId === ''
+    ) {
+      toast.error('Campos obrigatórios vazios')
+      return
+    }
     createStudent(studentData)
-    setOpenModal()
   }
 
   return (
@@ -90,6 +99,7 @@ export function NewStudentModal({
                   onChange={(value: string) => handleFieldChange('name', value)}
                   label="Nome"
                   value={studentData.name}
+                  mandatory
                 />
                 <IndividualDataForm
                   onChange={(value: string) =>
@@ -98,6 +108,7 @@ export function NewStudentModal({
                   label="Turma"
                   value={studentData.classId}
                   select
+                  mandatory
                 />
               </div>
               <div className="flex w-full justify-between gap-4">
@@ -107,6 +118,7 @@ export function NewStudentModal({
                   }
                   label="Email"
                   value={studentData.email}
+                  mandatory
                 />
                 <IndividualDataForm
                   onChange={(value: string) =>
@@ -115,6 +127,7 @@ export function NewStudentModal({
                   label="Senha"
                   value={studentData.password}
                   password
+                  mandatory
                 />
               </div>
               <div className="flex w-full justify-between gap-4">

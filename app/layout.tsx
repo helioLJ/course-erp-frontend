@@ -3,6 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import NextAuthSessionProvider from './providers/sessionProvider'
 import Hud from './components/Common/Hud'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {/* @ts-expect-error Aysnc Component */}
           <Hud />
           {children}
+          <Toaster />
         </NextAuthSessionProvider>
       </body>
     </html>

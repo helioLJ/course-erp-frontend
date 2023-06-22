@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { Eye } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -13,6 +14,7 @@ interface IndividualDataFormProps {
   date?: boolean
   textarea?: boolean
   select?: boolean
+  mandatory?: boolean
   selectStatus?: boolean
   onChange: any
 }
@@ -26,6 +28,7 @@ export function IndividualDataForm({
   textarea,
   select,
   selectStatus,
+  mandatory,
 }: IndividualDataFormProps) {
   const [show, setShow] = useState(false)
   const [classes, setClasses] = useState<ClassesType[]>([])
@@ -62,7 +65,10 @@ export function IndividualDataForm({
 
   return (
     <div className="flex w-full flex-col items-center">
-      <strong>{label}</strong>
+      <strong>
+        {label}
+        {mandatory && <span className="text-red-500">*</span>}
+      </strong>
       <div
         className={`${
           password
@@ -106,9 +112,12 @@ export function IndividualDataForm({
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
             value={classname.name}
             onChange={(e) => {
-              changeSelect(e.target.value)
+              if (e.target.value !== '') {
+                changeSelect(e.target.value)
+              }
             }}
           >
+            <option></option>
             {classes &&
               classes.map((classObj: ClassesType) => (
                 <option key={classObj.id} value={classObj.name}>
