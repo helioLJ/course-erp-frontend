@@ -1,19 +1,35 @@
 'use client'
-import { StudentType } from '../../types/student'
 import { FormEvent, useState } from 'react'
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import Button from '../Common/Button'
+import { StudentBody } from '@/app/types/studentBody'
 
 interface StudentEditFormProps {
-  studentData: StudentType
-  updateStudent: (studentData: StudentType) => Promise<void>
+  studentData: StudentBody
+  updateStudent: (studentData: StudentBody) => Promise<void>
 }
 
 export function StudentEditForm({
   studentData,
   updateStudent,
 }: StudentEditFormProps) {
-  const [newStudentData, setNewStudentData] = useState<StudentType>(studentData)
+  const [newStudentData, setNewStudentData] = useState<StudentBody>({
+    email: studentData.email,
+    password: studentData.password,
+    name: studentData.name,
+    status: studentData.status,
+    phone: studentData.phone,
+    birthday: studentData.birthday,
+    CPF: studentData.CPF,
+    RG: studentData.RG,
+    address: studentData.address,
+    father: studentData.father,
+    mother: studentData.mother,
+    observations: studentData.observations,
+    registration_day: studentData.registration_day,
+    registration_number: studentData.registration_number,
+    classId: studentData.classId,
+  })
 
   const handleFieldChange = (fieldName: string, newValue: string | number) => {
     if (fieldName === 'registration_number') {

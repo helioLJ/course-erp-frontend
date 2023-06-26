@@ -3,8 +3,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { StudentDetailsModalButtons } from './StudentDetailsModalButtons'
 import { StudentEditForm } from './StudentEditForm'
 import { api } from '@/app/lib/api'
-import { StudentType } from '@/app/types/student'
 import { IndividualData } from '../Common/IndividualData'
+import { StudentBody } from '@/app/types/studentBody'
+import { StudentType } from '@/app/types/student'
 
 interface StudentDetailsModalProps {
   detailsOpenId: string
@@ -50,7 +51,7 @@ export default function StudentDetails({
     }
   }
 
-  async function updateStudent(studentData: StudentType) {
+  async function updateStudent(studentData: StudentBody) {
     await api.put(`/student/${detailsOpenId}`, studentData)
     getStudent()
     setEditing(false)
@@ -75,7 +76,7 @@ export default function StudentDetails({
               setEditing={setEditing}
               handleClose={handleClose}
               updateTable={updateTable}
-              studendId={studentData.id}
+              studendId={detailsOpenId}
             />
           </div>
           {!editing ? (
