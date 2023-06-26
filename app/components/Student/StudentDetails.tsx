@@ -17,8 +17,8 @@ export default function StudentDetails({
   setDetailsOpenId,
   updateTable,
 }: StudentDetailsModalProps) {
-  const isOpen = detailsOpenId !== ''
-
+  const [editing, setEditing] = useState(false)
+  const handleClose = () => setDetailsOpenId('')
   const [studentData, setStudentData] = useState<StudentType>({
     id: '',
     email: '',
@@ -40,10 +40,10 @@ export default function StudentDetails({
       name: '',
     },
   })
-  const [editing, setEditing] = useState(false)
-  const handleClose = () => setDetailsOpenId('')
 
-  async function fetchData() {
+  const isOpen = detailsOpenId !== ''
+
+  async function getStudent() {
     if (detailsOpenId !== '') {
       const { data } = await api.get(`/student/${detailsOpenId}`)
       setStudentData(data.student)
@@ -52,13 +52,13 @@ export default function StudentDetails({
 
   async function updateStudent(studentData: StudentType) {
     await api.put(`/student/${detailsOpenId}`, studentData)
-    fetchData()
+    getStudent()
     setEditing(false)
     updateTable('', '')
   }
 
   useEffect(() => {
-    fetchData()
+    getStudent()
   }, [detailsOpenId])
 
   return (

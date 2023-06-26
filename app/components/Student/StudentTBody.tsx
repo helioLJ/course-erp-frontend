@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from 'react'
 import { StudentType } from '@/app/types/student'
 import StudentRow from './StudentRow'
-import { Dispatch, SetStateAction } from 'react'
 
 interface StudentTBodyProps {
   students: StudentType[]

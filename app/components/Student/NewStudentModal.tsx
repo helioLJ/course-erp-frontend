@@ -52,6 +52,7 @@ export function NewStudentModal({
     registration_number: 0,
     classId: '',
   })
+
   const handleFieldChange = (fieldName: string, newValue: string | number) => {
     if (fieldName === 'registration_number') {
       newValue = Number(newValue)

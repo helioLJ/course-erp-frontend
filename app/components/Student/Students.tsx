@@ -16,17 +16,17 @@ import { StudentTBodySkeleton } from './StudentTBodySkeleton'
 
 export default function Students() {
   const [openStudentModal, setOpenStudentModal] = useState(false)
-  const [students, setStudents] = useState<StudentType[]>([])
+  const [loading, setLoading] = useState(true)
+  const [currentOpenId, setCurrentOpenId] = useState('')
   const [queryName, setQueryName] = useState('')
+  const [students, setStudents] = useState<StudentType[]>([])
   const [classes, setClasses] = useState<ClassesType[]>([])
   const [classname, setClassname] = useState<{ name: string; id: string }>({
     name: '',
     id: '',
   })
-  const [currentOpenId, setCurrentOpenId] = useState('')
-  const [loading, setLoading] = useState(true) // Adicionando estado de loading
 
-  async function fetchData(queryName: string, queryClassId: string) {
+  async function getStudents(queryName: string, queryClassId: string) {
     setLoading(true) // Define o estado de loading como true
     let tempStudents: StudentType[] = []
 
@@ -59,7 +59,7 @@ export default function Students() {
     setLoading(false) // Define o estado de loading como false após o carregamento dos dados
   }
 
-  async function fetchClasses() {
+  async function getClasses() {
     const { data } = await api.get('/class')
     setClasses(data.classes)
   }
@@ -72,21 +72,21 @@ export default function Students() {
     try {
       const myPromise = postStudent()
       toast.promise(myPromise, {
-        loading: 'Criando...',
+        loading: 'Criando estudante...',
         success: 'Estudante criado!',
         error: 'Houve um erro!',
       })
       await myPromise // Aguarda a conclusão da criação do estudante
       setOpenStudentModal(false)
-      await fetchData('', '') // Aguarda a atualização da tabela
+      await getStudents('', '') // Aguarda a atualização da tabela
     } catch (error) {
       console.log(error)
     }
   }
 
   useEffect(() => {
-    fetchData(queryName, classname.id)
-    fetchClasses()
+    getStudents(queryName, classname.id)
+    getClasses()
   }, [queryName, classname])
 
   return (
@@ -124,7 +124,7 @@ export default function Students() {
         <StudentDetails
           detailsOpenId={currentOpenId}
           setDetailsOpenId={setCurrentOpenId}
-          updateTable={fetchData}
+          updateTable={getStudents}
         />
       </div>
     </div>
