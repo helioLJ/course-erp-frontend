@@ -12,7 +12,7 @@ import Button from '../Common/Button'
 import StudentDetails from './StudentDetails'
 import { toast } from 'react-hot-toast'
 import { StudentTBody } from './StudentTBody'
-import { StudentTBodySkeleton } from './StudentTBodySkeleton'
+import { TBodySkeleton } from '../Common/TBodySkeleton'
 
 export default function StudentsAdminPage() {
   const [openStudentModal, setOpenStudentModal] = useState(false)
@@ -113,7 +113,7 @@ export default function StudentsAdminPage() {
         <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
           <StudentTHead />
           {loading ? (
-            <StudentTBodySkeleton />
+            <TBodySkeleton />
           ) : (
             <StudentTBody
               students={students}

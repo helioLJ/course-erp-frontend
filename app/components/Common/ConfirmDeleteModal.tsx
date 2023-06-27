@@ -3,7 +3,7 @@ import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Fade from '@mui/material/Fade'
-import { FormEvent } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -20,20 +20,21 @@ const style = {
 }
 
 interface ConfirmDeleteModalProps {
-  setOpenModal: any
+  setOpenDeleteModal: Dispatch<SetStateAction<boolean>>
   modal: boolean
-  deletePerson: any
+  deletePerson: () => void
 }
 
 export function ConfirmDeleteModal({
-  setOpenModal,
+  setOpenDeleteModal,
   modal,
   deletePerson,
 }: ConfirmDeleteModalProps) {
-  const handleClose = () => setOpenModal(false)
+  function handleClose() {
+    setOpenDeleteModal(false)
+  }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  async function handleDelete() {
     deletePerson()
     handleClose()
   }
@@ -55,7 +56,7 @@ export function ConfirmDeleteModal({
       >
         <Fade in={modal}>
           <Box sx={style}>
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-4">
               <p>
                 Tem certeza que deseja deletar esse registro? Essa ação deletará
                 o dado permanentemente.
@@ -64,17 +65,19 @@ export function ConfirmDeleteModal({
                 <button
                   type="button"
                   className="w-full rounded-xl bg-zinc-400 p-3 font-bold text-white"
+                  onClick={() => handleClose()}
                 >
                   Cancelar
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   className="w-full rounded-xl bg-red-500 p-3 font-bold text-white"
+                  onClick={() => handleDelete()}
                 >
                   Deletar
                 </button>
               </div>
-            </form>
+            </div>
           </Box>
         </Fade>
       </Modal>

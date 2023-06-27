@@ -43,7 +43,7 @@ export default function NavMenu() {
               'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
-            <Link href="#">Professores</Link>
+            <Link href="professor">Professores</Link>
           </li>
           <li
             className={`${

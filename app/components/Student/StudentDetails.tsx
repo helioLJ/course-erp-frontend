@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { StudentDetailsModalButtons } from './StudentDetailsModalButtons'
 import { StudentEditForm } from './StudentEditForm'
 import { api } from '@/app/lib/api'
 import { IndividualData } from '../Common/IndividualData'
@@ -8,6 +7,7 @@ import { StudentType } from '@/app/types/student'
 import { toast } from 'react-hot-toast'
 import Image from 'next/image'
 import UserImg from '../../assets/User.png'
+import { DetailsModalButtons } from '../Common/DetailsModalButtons'
 
 interface StudentDetailsModalProps {
   detailsOpenId: string
@@ -74,6 +74,12 @@ export default function StudentDetails({
     }
   }
 
+  async function deleteStudent() {
+    await api.delete(`/student/${detailsOpenId}`)
+    updateTable('', '')
+    handleClose()
+  }
+
   useEffect(() => {
     getStudent()
   }, [detailsOpenId])
@@ -87,12 +93,11 @@ export default function StudentDetails({
       <div className="relative flex h-full w-full justify-center py-6 dark:border-zinc-600 dark:bg-zinc-700">
         <div className="w-full space-y-5 px-6">
           <div className="flex justify-between">
-            <StudentDetailsModalButtons
+            <DetailsModalButtons
               editing={editing}
               setEditing={setEditing}
               handleClose={handleClose}
-              updateTable={updateTable}
-              studendId={detailsOpenId}
+              deleteUser={deleteStudent}
             />
           </div>
           {!editing ? (

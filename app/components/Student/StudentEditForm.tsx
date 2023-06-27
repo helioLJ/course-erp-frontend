@@ -80,10 +80,8 @@ export function StudentEditForm({
   const studentBirthday = studentData.birthday && new Date(studentData.birthday)
   const studentRegistrationDay =
     studentData.registration_day && new Date(studentData.registration_day)
-  console.log(studentBirthday, studentRegistrationDay)
 
   function handleUpdate(data: handleUpdateFormData) {
-    console.log(data)
     updateStudent(data)
   }
 
