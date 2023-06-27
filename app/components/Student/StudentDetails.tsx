@@ -75,9 +75,23 @@ export default function StudentDetails({
   }
 
   async function deleteStudent() {
-    await api.delete(`/student/${detailsOpenId}`)
-    updateTable('', '')
-    handleClose()
+    async function deleteStudent() {
+      await api.delete(`/student/${detailsOpenId}`)
+    }
+
+    try {
+      const myPromise = deleteStudent()
+      toast.promise(myPromise, {
+        loading: 'Deletando...',
+        success: 'Deletado com sucesso!',
+        error: 'Houve um erro!',
+      })
+      await myPromise // Aguarda a conclusão da criação do estudante
+      updateTable('', '')
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {

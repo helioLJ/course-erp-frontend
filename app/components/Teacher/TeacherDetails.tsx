@@ -63,9 +63,23 @@ export default function TeacherDetails({
   }
 
   async function deleteTeacher() {
-    await api.delete(`/teacher/${detailsOpenId}`)
-    updateTable('')
-    handleClose()
+    async function deleteTeacher() {
+      await api.delete(`/teacher/${detailsOpenId}`)
+    }
+
+    try {
+      const myPromise = deleteTeacher()
+      toast.promise(myPromise, {
+        loading: 'Deletando...',
+        success: 'Deletado com sucesso!',
+        error: 'Houve um erro!',
+      })
+      await myPromise
+      updateTable('')
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
