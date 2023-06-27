@@ -10,13 +10,13 @@ export default function NavMenu() {
   const pathname = usePathname()
 
   return (
-    <header className="absolute left-0 right-0 top-0 flex items-center justify-between gap-2 border-b-2 border-gray-200 bg-white px-7 py-4 md:px-28">
+    <header className="absolute left-0 right-0 top-0 flex items-center justify-between gap-2 border-b-2 border-gray-200 bg-white px-7 py-4 dark:border-zinc-600 dark:bg-zinc-800 md:px-28">
       <nav className="hidden w-fit overflow-hidden lg:block">
-        <ul className="flex w-auto flex-wrap gap-4 bg-white px-6 text-zinc-400">
+        <ul className="flex w-auto flex-wrap gap-4 px-6 text-zinc-400">
           <li
             className={`${
               pathname === '/' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="/">Alunos</Link>
@@ -24,7 +24,7 @@ export default function NavMenu() {
           <li
             className={`${
               pathname === '/payments' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="#">Pagamentos</Link>
@@ -32,7 +32,7 @@ export default function NavMenu() {
           <li
             className={`${
               pathname === '/grades' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="#">Notas</Link>
@@ -40,7 +40,7 @@ export default function NavMenu() {
           <li
             className={`${
               pathname === '/teachers' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="#">Professores</Link>
@@ -48,7 +48,7 @@ export default function NavMenu() {
           <li
             className={`${
               pathname === '/classes' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="#">Turmas</Link>
@@ -56,7 +56,7 @@ export default function NavMenu() {
           <li
             className={`${
               pathname === '/subjects' &&
-              'border-b-2 border-green-500 font-bold text-zinc-800'
+              'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
             <Link href="#">Disciplinas</Link>

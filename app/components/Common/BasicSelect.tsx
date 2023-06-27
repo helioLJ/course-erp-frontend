@@ -48,7 +48,7 @@ export default function BasicSelect({
 
   return (
     <select
-      className="rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+      className="rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-800"
       value={value.name}
       onChange={handleChange}
     >

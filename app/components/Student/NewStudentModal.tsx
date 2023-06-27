@@ -14,7 +14,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
+  width: '100%',
+  maxWidth: 600,
   bgcolor: 'background.paper',
   border: '1px solid #27272A',
   borderRadius: '10px',
@@ -49,8 +50,8 @@ const handleCreateFormSchema = z.object({
     .min(6, 'A senha precisa de no mínimo 6 caracteres.')
     .nonempty('Campo obrigatório.'),
   phone: z.string(),
-  birthday: z.coerce.date(),
-  registration_day: z.coerce.date(),
+  birthday: z.union([z.string(), z.coerce.date()]),
+  registration_day: z.union([z.string(), z.coerce.date()]),
   registration_number: z.coerce.number(),
   CPF: z.string(),
   RG: z.string(),
@@ -82,6 +83,7 @@ export function NewStudentModal({
       ...data,
       status: 'Matriculado',
     }
+    console.log(data)
 
     createStudent(updatedData)
   }
@@ -102,7 +104,7 @@ export function NewStudentModal({
         }}
       >
         <Fade in={modal}>
-          <Box sx={style}>
+          <Box sx={style} className="dark:bg-zinc-800">
             <form className="space-y-4" onSubmit={handleSubmit(handleCreate)}>
               <div className="flex w-full justify-between gap-4">
                 <IndividualDataForm
@@ -151,6 +153,7 @@ export function NewStudentModal({
                   date
                   register={register}
                   registerName="birthday"
+                  errors={errors.birthday}
                 />
                 <IndividualDataForm
                   label="Endereço"

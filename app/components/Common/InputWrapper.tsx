@@ -17,7 +17,7 @@ export default function InputWrapper({
     <div className="flex flex-col gap-2 text-left">
       <label htmlFor={label}>{label}</label>
       <input
-        className="rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+        className="rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
         placeholder={placeholder}
         name={label}
         type={type}

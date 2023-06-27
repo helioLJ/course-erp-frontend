@@ -8,7 +8,7 @@ import InputMask from 'react-input-mask'
 
 interface IndividualDataFormProps {
   label: string
-  value?: string | number | Date
+  value?: any
   password?: boolean
   date?: boolean
   textarea?: boolean
@@ -66,21 +66,21 @@ export function IndividualDataForm({
       >
         {date ? (
           <input
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-2 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-2 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             type="date"
-            defaultValue={value}
+            defaultValue={value && value.toISOString().split('T')[0]}
             {...register(`${registerName}`)}
           />
         ) : password ? (
           <input
-            className="relative w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="relative w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             type={`${show ? 'password' : 'text'}`}
             value={value}
             {...register(`${registerName}`)}
           />
         ) : textarea ? (
           <textarea
-            className="w-full resize-none rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full resize-none rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             defaultValue={value}
             {...register(`${registerName}`)}
           />
@@ -88,7 +88,7 @@ export function IndividualDataForm({
           <>
             {classes && classes.length > 0 ? (
               <select
-                className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+                className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
                 {...register(`${registerName}`)}
               >
                 <option value="">Selecione Turma</option>
@@ -104,7 +104,7 @@ export function IndividualDataForm({
           </>
         ) : selectStatus ? (
           <select
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             value={value}
             {...register(`${registerName}`)}
           >
@@ -115,7 +115,7 @@ export function IndividualDataForm({
           </select>
         ) : label === 'CPF' ? (
           <InputMask
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             value={value}
             mask="999.999.999-99"
             placeholder="999.999.999-99"
@@ -123,7 +123,7 @@ export function IndividualDataForm({
           />
         ) : label === 'RG' ? (
           <InputMask
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             value={value}
             mask="99.999.999-9"
             placeholder="99.999.999-9"
@@ -131,7 +131,7 @@ export function IndividualDataForm({
           />
         ) : label === 'Telefone' ? (
           <InputMask
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             value={value}
             mask="(99) 99999-9999"
             placeholder="(00) 00000-0000"
@@ -139,7 +139,7 @@ export function IndividualDataForm({
           />
         ) : (
           <input
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
             type={`${type}`}
             value={value}
             {...register(`${registerName}`)}

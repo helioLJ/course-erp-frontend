@@ -25,8 +25,14 @@ const handleUpdateFormSchema = z.object({
     .min(6, 'A senha precisa de no mínimo 6 caracteres.')
     .nonempty('Campo obrigatório.'),
   phone: z.string(),
-  birthday: z.coerce.date(),
-  registration_day: z.coerce.date(),
+  birthday: z.union([
+    z.string().transform((str) => new Date(str)),
+    z.coerce.date(),
+  ]),
+  registration_day: z.union([
+    z.string().transform((str) => new Date(str)),
+    z.coerce.date(),
+  ]),
   registration_number: z.coerce.number(),
   CPF: z.string(),
   RG: z.string(),
@@ -61,21 +67,23 @@ export function StudentEditForm({
       password: studentData.password,
       status: studentData.status,
       phone: studentData.phone,
-      birthday: new Date(studentData.birthday).toISOString().split('T')[0],
       address: studentData.address,
       CPF: studentData.CPF,
       RG: studentData.RG,
       registration_number: studentData.registration_number,
-      registration_day: new Date(studentData.registration_day)
-        .toISOString()
-        .split('T')[0],
       father: studentData.father,
       mother: studentData.mother,
       observations: studentData.observations,
     },
   })
 
+  const studentBirthday = studentData.birthday && new Date(studentData.birthday)
+  const studentRegistrationDay =
+    studentData.registration_day && new Date(studentData.registration_day)
+  console.log(studentBirthday, studentRegistrationDay)
+
   function handleUpdate(data: handleUpdateFormData) {
+    console.log(data)
     updateStudent(data)
   }
 
@@ -131,6 +139,7 @@ export function StudentEditForm({
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
+          value={studentBirthday}
           label="Data de Nascimento"
           date
           register={register}
@@ -158,6 +167,7 @@ export function StudentEditForm({
           type="number"
         />
         <IndividualDataForm
+          value={studentRegistrationDay}
           label="Data de Matrí."
           date
           register={register}

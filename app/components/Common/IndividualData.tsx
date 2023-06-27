@@ -21,7 +21,11 @@ export function IndividualData({
 }: IndividualDataProps) {
   const [show, setShow] = useState(false)
 
-  const formattedDate = dayjs(value).locale('pt-br').format('DD/MM/YYYY')
+  let formattedDate = dayjs(value).locale('pt-br').format('DD/MM/YYYY')
+
+  if (formattedDate === 'Invalid Date') {
+    formattedDate = '__/__/____'
+  }
 
   function showPassword() {
     setShow(!show)

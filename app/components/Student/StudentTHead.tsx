@@ -1,7 +1,7 @@
 export function StudentTHead() {
   return (
-    <thead className="hidden bg-white text-left lg:table-header-group">
-      <tr className="border-y-2 border-gray-200 text-lg font-bold text-zinc-400">
+    <thead className="hidden bg-white text-left dark:bg-zinc-800 lg:table-header-group">
+      <tr className="border-y-2 border-gray-200 text-lg font-bold text-zinc-400 dark:border-zinc-600">
         <th className="p-4">Nome</th>
         <th className="p-4">Turma</th>
         <th className="p-4">Telefone</th>

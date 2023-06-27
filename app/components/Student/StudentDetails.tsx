@@ -4,8 +4,8 @@ import { StudentDetailsModalButtons } from './StudentDetailsModalButtons'
 import { StudentEditForm } from './StudentEditForm'
 import { api } from '@/app/lib/api'
 import { IndividualData } from '../Common/IndividualData'
-import { StudentBody } from '@/app/types/studentBody'
 import { StudentType } from '@/app/types/student'
+import { toast } from 'react-hot-toast'
 
 interface StudentDetailsModalProps {
   detailsOpenId: string
@@ -51,11 +51,25 @@ export default function StudentDetails({
     }
   }
 
-  async function updateStudent(studentData: StudentBody) {
-    await api.put(`/student/${detailsOpenId}`, studentData)
-    getStudent()
-    setEditing(false)
-    updateTable('', '')
+  async function updateStudent(studentData: any) {
+    async function putStudent() {
+      await api.put(`/student/${detailsOpenId}`, studentData)
+    }
+
+    try {
+      const myPromise = putStudent()
+      toast.promise(myPromise, {
+        loading: 'Editando perfil...',
+        success: 'Perfil editado!',
+        error: 'Houve um erro!',
+      })
+      await myPromise // Aguarda a conclusão da criação do estudante
+      getStudent()
+      setEditing(false)
+      updateTable('', '')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
@@ -66,7 +80,7 @@ export default function StudentDetails({
     <div
       className={`${
         isOpen ? '-translate-x-[450px]' : null
-      } absolute -right-[450px] top-0 z-50 flex h-full w-[450px] border-2 border-gray-200 bg-white transition-transform dark:border-zinc-600 dark:bg-zinc-800`}
+      } absolute -right-[450px] top-0 z-50 flex h-full w-full max-w-[450px] border-2 border-gray-200 bg-white transition-transform dark:border-zinc-600 dark:bg-zinc-800`}
     >
       <div className="relative flex h-full w-full justify-center py-6 dark:border-zinc-600 dark:bg-zinc-700">
         <div className="w-full space-y-5 px-6">
@@ -82,8 +96,19 @@ export default function StudentDetails({
           {!editing ? (
             <>
               <div className="pb-6 text-center">
-                <h1 className="text-3xl font-bold">{studentData.name}</h1>
-                <span className="text-zinc-400">{studentData.class.name}</span>
+                {studentData.name === '' && studentData.class.name === '' ? (
+                  <>
+                    <h1 className="text-3xl font-bold">Carregando...</h1>
+                    <span className="text-zinc-400">Carregando...</span>
+                  </>
+                ) : (
+                  <>
+                    <h1 className="text-3xl font-bold">{studentData.name}</h1>
+                    <span className="text-zinc-400">
+                      {studentData.class.name}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex w-full">
                 <IndividualData label="Email" value={studentData.email} />

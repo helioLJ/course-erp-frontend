@@ -64,7 +64,7 @@ export default function Students() {
     setClasses(data.classes)
   }
 
-  async function createStudent(studentData: {}) {
+  async function createStudent(studentData: any) {
     async function postStudent() {
       await api.post(`/student`, studentData)
     }
@@ -76,9 +76,9 @@ export default function Students() {
         success: 'Estudante criado!',
         error: 'Houve um erro!',
       })
-      await myPromise // Aguarda a conclusão da criação do estudante
+      await myPromise
       setOpenStudentModal(false)
-      await getStudents('', '') // Aguarda a atualização da tabela
+      await getStudents('', '')
     } catch (error) {
       console.log(error)
     }
@@ -109,7 +109,7 @@ export default function Students() {
           )}
         </div>
       </div>
-      <div className="rounded-lg border-x-2 border-gray-200">
+      <div className="rounded-lg border-x-2 border-gray-200 dark:border-zinc-600">
         <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
           <StudentTHead />
           {loading ? (

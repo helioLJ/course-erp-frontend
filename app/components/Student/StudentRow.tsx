@@ -26,7 +26,7 @@ export default function StudentRow({
   // const [status, setStatus] = useState('Em dias')
 
   return (
-    <tr className="mb-4 block border-y-2 border-gray-200 bg-white dark:text-zinc-800 lg:table-row">
+    <tr className="mb-4 block border-y-2 border-gray-200 bg-white dark:border-zinc-600 dark:bg-zinc-800 dark:text-white lg:table-row">
       <DefaultCell label="Nome">{name}</DefaultCell>
       <DefaultCell label="Turma">{className}</DefaultCell>
       <DefaultCell label="Telefone">{phone}</DefaultCell>
