@@ -6,6 +6,8 @@ import { api } from '@/app/lib/api'
 import { IndividualData } from '../Common/IndividualData'
 import { StudentType } from '@/app/types/student'
 import { toast } from 'react-hot-toast'
+import Image from 'next/image'
+import UserImg from '../../assets/User.png'
 
 interface StudentDetailsModalProps {
   detailsOpenId: string
@@ -102,12 +104,13 @@ export default function StudentDetails({
                     <span className="text-zinc-400">Carregando...</span>
                   </>
                 ) : (
-                  <>
+                  <div className="flex flex-col items-center gap-4">
+                    <Image src={UserImg} alt="Ícone de Estudante" />
                     <h1 className="text-3xl font-bold">{studentData.name}</h1>
                     <span className="text-zinc-400">
                       {studentData.class.name}
                     </span>
-                  </>
+                  </div>
                 )}
               </div>
               <div className="flex w-full">

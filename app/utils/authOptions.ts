@@ -46,12 +46,7 @@ export const authOptions: NextAuthOptions = {
         cookies().set({
           name: 'trilogia_token',
           value: token,
-          // httpOnly: true,
-          // path: '/',
         })
-        // setCookie(null, 'trilogia@token', token, {
-        //   maxAge: 60 * 60 * 24 * 30, // Tempo de vida do cookie em segundos
-        // })
 
         if (res.ok && user) {
           return {

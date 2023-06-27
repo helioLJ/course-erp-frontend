@@ -14,7 +14,7 @@ import { toast } from 'react-hot-toast'
 import { StudentTBody } from './StudentTBody'
 import { StudentTBodySkeleton } from './StudentTBodySkeleton'
 
-export default function Students() {
+export default function StudentsAdminPage() {
   const [openStudentModal, setOpenStudentModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [currentOpenId, setCurrentOpenId] = useState('')
