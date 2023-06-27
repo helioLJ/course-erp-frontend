@@ -4,7 +4,7 @@ export interface StudentBody {
   name: string
   status: string
   phone: string
-  birthday: string
+  birthday: string | Date
   CPF: string
   RG: string
   address: string

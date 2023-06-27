@@ -1,4 +1,3 @@
-'use client'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
@@ -47,7 +46,7 @@ const handleCreateFormSchema = z.object({
   email: z.string().email('Email inválido.').nonempty('Campo obrigatório.'),
   password: z
     .string()
-    .min(3, 'A senha precisa de no mínimo 6 caracteres.')
+    .min(6, 'A senha precisa de no mínimo 6 caracteres.')
     .nonempty('Campo obrigatório.'),
   phone: z.string(),
   birthday: z.coerce.date(),
@@ -78,7 +77,7 @@ export function NewStudentModal({
     resolver: zodResolver(handleCreateFormSchema),
   })
 
-  function handleCreate(data: any) {
+  function handleCreate(data: handleCreateFormData) {
     const updatedData = {
       ...data,
       status: 'Matriculado',

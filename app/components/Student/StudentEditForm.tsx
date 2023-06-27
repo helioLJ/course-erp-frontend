@@ -1,152 +1,187 @@
-'use client'
-import { FormEvent, useState } from 'react'
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import Button from '../Common/Button'
 import { StudentBody } from '@/app/types/studentBody'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const handleUpdateFormSchema = z.object({
+  name: z
+    .string()
+    .nonempty('Campo obrigatório.')
+    .transform((name) => {
+      return name
+        .trim()
+        .split(' ')
+        .map((word) => {
+          return word[0].toLocaleUpperCase().concat(word.substring(1))
+        })
+        .join(' ')
+    }),
+  classId: z.string().nonempty('Campo obrigatório.'),
+  email: z.string().email('Email inválido.').nonempty('Campo obrigatório.'),
+  password: z
+    .string()
+    .min(6, 'A senha precisa de no mínimo 6 caracteres.')
+    .nonempty('Campo obrigatório.'),
+  phone: z.string(),
+  birthday: z.coerce.date(),
+  registration_day: z.coerce.date(),
+  registration_number: z.coerce.number(),
+  CPF: z.string(),
+  RG: z.string(),
+  address: z.string(),
+  father: z.string(),
+  mother: z.string(),
+  observations: z.string(),
+  status: z.string(),
+})
+
+type handleUpdateFormData = z.infer<typeof handleUpdateFormSchema>
 
 interface StudentEditFormProps {
   studentData: StudentBody
-  updateStudent: (studentData: StudentBody) => Promise<void>
+  updateStudent: (studentData: handleUpdateFormData) => Promise<void>
 }
 
 export function StudentEditForm({
   studentData,
   updateStudent,
 }: StudentEditFormProps) {
-  const [newStudentData, setNewStudentData] = useState<StudentBody>({
-    email: studentData.email,
-    password: studentData.password,
-    name: studentData.name,
-    status: studentData.status,
-    phone: studentData.phone,
-    birthday: studentData.birthday,
-    CPF: studentData.CPF,
-    RG: studentData.RG,
-    address: studentData.address,
-    father: studentData.father,
-    mother: studentData.mother,
-    observations: studentData.observations,
-    registration_day: studentData.registration_day,
-    registration_number: studentData.registration_number,
-    classId: studentData.classId,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<handleUpdateFormData>({
+    resolver: zodResolver(handleUpdateFormSchema),
+    defaultValues: {
+      name: studentData.name,
+      classId: studentData.classId,
+      email: studentData.email,
+      password: studentData.password,
+      status: studentData.status,
+      phone: studentData.phone,
+      birthday: new Date(studentData.birthday).toISOString().split('T')[0],
+      address: studentData.address,
+      CPF: studentData.CPF,
+      RG: studentData.RG,
+      registration_number: studentData.registration_number,
+      registration_day: new Date(studentData.registration_day)
+        .toISOString()
+        .split('T')[0],
+      father: studentData.father,
+      mother: studentData.mother,
+      observations: studentData.observations,
+    },
   })
 
-  const handleFieldChange = (fieldName: string, newValue: string | number) => {
-    if (fieldName === 'registration_number') {
-      newValue = Number(newValue)
-    }
-    setNewStudentData((prevState) => ({
-      ...prevState,
-      [fieldName]: newValue,
-    }))
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    updateStudent(newStudentData)
+  function handleUpdate(data: handleUpdateFormData) {
+    updateStudent(data)
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={handleSubmit(handleUpdate)}>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('name', value)}
           label="Nome"
-          value={newStudentData.name}
+          mandatory
+          register={register}
+          registerName="name"
+          errors={errors.name}
         />
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('classId', value)}
           label="Turma"
-          value={newStudentData.classId}
           select
+          mandatory
+          register={register}
+          registerName="classId"
+          errors={errors.classId}
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('email', value)}
           label="Email"
-          value={newStudentData.email}
+          mandatory
+          register={register}
+          registerName="email"
+          errors={errors.email}
         />
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('password', value)}
           label="Senha"
-          value={newStudentData.password}
           password
+          mandatory
+          register={register}
+          registerName="password"
+          errors={errors.password}
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('phone', value)}
           label="Telefone"
-          value={newStudentData.phone}
+          register={register}
+          registerName="phone"
         />
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('status', value)}
           label="Status"
+          register={register}
+          registerName="status"
           value={studentData.status}
           selectStatus
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('birthday', value)}
           label="Data de Nascimento"
-          value={newStudentData.birthday}
           date
+          register={register}
+          registerName="birthday"
         />
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('address', value)}
           label="Endereço"
-          value={newStudentData.address}
+          register={register}
+          registerName="address"
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('CPF', value)}
           label="CPF"
-          value={newStudentData.CPF}
+          register={register}
+          registerName="CPF"
         />
-        <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('RG', value)}
-          label="RG"
-          value={newStudentData.RG}
-        />
+        <IndividualDataForm label="RG" register={register} registerName="RG" />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) =>
-            handleFieldChange('registration_number', value)
-          }
           label="Núm. de Matrí."
-          value={newStudentData.registration_number}
+          register={register}
+          registerName="registration_number"
+          type="number"
         />
         <IndividualDataForm
-          onChange={(value: string) =>
-            handleFieldChange('registration_day', value)
-          }
           label="Data de Matrí."
-          value={newStudentData.registration_day}
           date
+          register={register}
+          registerName="registration_day"
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('father', value)}
           label="Pai"
-          value={newStudentData.father}
+          register={register}
+          registerName="father"
         />
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('mother', value)}
           label="Mãe"
-          value={newStudentData.mother}
+          register={register}
+          registerName="mother"
         />
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          onChange={(value: string) => handleFieldChange('observations', value)}
           label="Observações"
-          value={studentData.observations}
           textarea
+          register={register}
+          registerName="observations"
         />
       </div>
       <Button value="Atualizar Dados" type="submit" />

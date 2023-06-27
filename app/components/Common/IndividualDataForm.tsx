@@ -2,15 +2,13 @@
 'use client'
 import { Eye } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
-import 'dayjs/locale/pt-br'
 import { ClassesType } from './BasicSelect'
 import { api } from '@/app/lib/api'
 import InputMask from 'react-input-mask'
 
 interface IndividualDataFormProps {
   label: string
-  value?: string | number
+  value?: string | number | Date
   password?: boolean
   date?: boolean
   textarea?: boolean
@@ -39,23 +37,6 @@ export function IndividualDataForm({
 }: IndividualDataFormProps) {
   const [show, setShow] = useState(false)
   const [classes, setClasses] = useState<ClassesType[]>([])
-  // const [status, setStatus] = useState('')
-  // const [classname, setClassname] = useState<{ name: string; id: string }>({
-  //   name: '',
-  //   id: '',
-  // })
-
-  let initialValue: any = value
-
-  if (date) {
-    initialValue = dayjs(value, 'YYYY/MM/DD').format('YYYY-MM-DD')
-  }
-
-  // function changeSelect(className: string) {
-  //   const desiredClass: any = classes.find((item) => item.name === className)
-  //   register(desiredClass.id)
-  //   setClassname({ name: className, id: desiredClass.id })
-  // }
 
   function showPassword() {
     setShow(!show)
@@ -87,45 +68,47 @@ export function IndividualDataForm({
           <input
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-2 placeholder:text-zinc-400"
             type="date"
-            value={initialValue}
+            defaultValue={value}
             {...register(`${registerName}`)}
           />
         ) : password ? (
           <input
             className="relative w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
             type={`${show ? 'password' : 'text'}`}
-            value={initialValue}
+            value={value}
             {...register(`${registerName}`)}
           />
         ) : textarea ? (
           <textarea
             className="w-full resize-none rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            defaultValue={initialValue}
+            defaultValue={value}
             {...register(`${registerName}`)}
           />
         ) : select ? (
-          <select
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
-            {...register(`${registerName}`)}
-          >
-            <option></option>
-            {classes &&
-              classes.map((classObj: ClassesType) => (
-                <option key={classObj.id} value={classObj.id}>
-                  {classObj.name}
-                </option>
-              ))}
-          </select>
+          <>
+            {classes && classes.length > 0 ? (
+              <select
+                className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
+                {...register(`${registerName}`)}
+              >
+                <option value="">Selecione Turma</option>
+                {classes.map((classObj: ClassesType) => (
+                  <option key={classObj.id} value={classObj.id}>
+                    {classObj.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p>Carregando turmas...</p>
+            )}
+          </>
         ) : selectStatus ? (
           <select
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
+            value={value}
             {...register(`${registerName}`)}
           >
-            <option selected value="Matriculado">
-              Matriculado
-            </option>
+            <option value="Matriculado">Matriculado</option>
             <option value="Terminou">Terminou</option>
             <option value="Trancou">Trancou</option>
             <option value="Desistente">Desistente</option>
@@ -133,7 +116,7 @@ export function IndividualDataForm({
         ) : label === 'CPF' ? (
           <InputMask
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
+            value={value}
             mask="999.999.999-99"
             placeholder="999.999.999-99"
             {...register(`${registerName}`)}
@@ -141,7 +124,7 @@ export function IndividualDataForm({
         ) : label === 'RG' ? (
           <InputMask
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
+            value={value}
             mask="99.999.999-9"
             placeholder="99.999.999-9"
             {...register(`${registerName}`)}
@@ -149,7 +132,7 @@ export function IndividualDataForm({
         ) : label === 'Telefone' ? (
           <InputMask
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
-            value={initialValue}
+            value={value}
             mask="(99) 99999-9999"
             placeholder="(00) 00000-0000"
             {...register(`${registerName}`)}
@@ -158,7 +141,7 @@ export function IndividualDataForm({
           <input
             className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400"
             type={`${type}`}
-            value={initialValue}
+            value={value}
             {...register(`${registerName}`)}
           />
         )}
