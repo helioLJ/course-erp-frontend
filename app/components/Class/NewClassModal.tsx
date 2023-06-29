@@ -124,7 +124,7 @@ export function NewClassModal({
                   date
                 />
               </div>
-              <Button value="Criar Aluno" type="submit" />
+              <Button value="Criar Turma" type="submit" />
             </form>
           </Box>
         </Fade>

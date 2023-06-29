@@ -1,3 +1,4 @@
+'use client'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
@@ -8,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { SelectStudent } from '../Inputs/SelectStudent'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -24,34 +26,26 @@ const style = {
   p: 4,
 }
 
-interface NewSubjectModalProps {
+interface NewGradeModalProps {
   setOpenModal: any
   modal: boolean
-  createSubject: (classData: any) => void
+  createGrade: (gradeData: any) => void
 }
 
 const handleCreateFormSchema = z.object({
-  name: z
-    .string()
-    .nonempty('Campo obrigatório.')
-    .transform((name) => {
-      return name
-        .trim()
-        .split(' ')
-        .map((word) => {
-          return word[0].toLocaleUpperCase().concat(word.substring(1))
-        })
-        .join(' ')
-    }),
+  grade: z.number(),
+  frequency: z.string().nonempty('Campo obrigatório.'),
+  studentId: z.string().nonempty('Campo obrigatório.'),
+  subjectId: z.string().nonempty('Campo obrigatório.'),
 })
 
 type handleCreateFormData = z.infer<typeof handleCreateFormSchema>
 
-export function NewSubjectModal({
+export function NewGradeModal({
   setOpenModal,
   modal,
-  createSubject,
-}: NewSubjectModalProps) {
+  createGrade,
+}: NewGradeModalProps) {
   const handleClose = () => setOpenModal(false)
 
   const {
@@ -63,7 +57,7 @@ export function NewSubjectModal({
   })
 
   function handleCreate(data: handleCreateFormData) {
-    createSubject(data)
+    createGrade(data)
   }
 
   return (
@@ -85,15 +79,34 @@ export function NewSubjectModal({
           <Box sx={style} className="dark:bg-zinc-800">
             <form className="space-y-4" onSubmit={handleSubmit(handleCreate)}>
               <div className="flex w-full justify-between gap-4">
+                <SelectStudent register={register} registerName="studentId" />
                 <IndividualDataForm
-                  label="Nome"
+                  label="Disciplina"
                   mandatory
                   register={register}
-                  registerName="name"
-                  errors={errors.name}
+                  registerName="subjectId"
+                  errors={errors.subjectId}
+                  selectStatus
                 />
               </div>
-              <Button value="Criar Disciplina" type="submit" />
+              <div className="flex w-full justify-between gap-4">
+                <IndividualDataForm
+                  label="Nota"
+                  mandatory
+                  register={register}
+                  registerName="grade"
+                  errors={errors.grade}
+                  // number
+                />
+                <IndividualDataForm
+                  label="Frequência"
+                  mandatory
+                  register={register}
+                  registerName="frequency"
+                  errors={errors.frequency}
+                />
+              </div>
+              <Button value="Cadastrar Nota" type="submit" />
             </form>
           </Box>
         </Fade>

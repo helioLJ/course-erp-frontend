@@ -19,7 +19,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         className={`${inter.variable} overflow-x-hidden bg-gray-100 px-7 py-7 font-sans text-zinc-800 transition-colors dark:bg-zinc-800 dark:text-white md:px-28`}
       >
         <NextAuthSessionProvider>
-          {/* @ts-expect-error Aysnc Component */}
           <Hud />
           {children}
           <Toaster />

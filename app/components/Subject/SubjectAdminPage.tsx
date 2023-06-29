@@ -73,7 +73,7 @@ export default function SubjectAdminPage() {
           <Button
             onClick={() => setOpenSubjectModal(true)}
             type="button"
-            value="Nova Turma"
+            value="Nova Disciplina"
           />
           {openSubjectModal && (
             <NewSubjectModal
