@@ -6,63 +6,63 @@ import { useEffect, useState } from 'react'
 import SearchField from '../Common/SearchField'
 import Button from '../Common/Button'
 import { toast } from 'react-hot-toast'
-import { THead } from '../Common/THead'
 import { TBodySkeleton } from '../Common/TBodySkeleton'
-import { TeacherTBody } from './TeacherTBody'
-import TeacherDetails from './TeacherDetails'
-import { NewTeacherModal } from './NewTeacherModal'
-import { TeacherType } from '@/app/types/teacher'
+import { THead } from '../Common/THead'
+import { NewClassModal } from './NewClassModal'
+import { ClassTBody } from './ClassTBody'
+import ClassDetails from './ClassDetails'
+import { ClassesType } from '@/app/types/classes'
 
-export default function TeachersAdminPage() {
-  const [openTeacherModal, setOpenTeacherModal] = useState(false)
+export default function ClassAdminPage() {
+  const [openClassModal, setOpenClassModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [currentOpenId, setCurrentOpenId] = useState('')
   const [queryName, setQueryName] = useState('')
-  const [teachers, setTeachers] = useState<TeacherType[]>([])
+  const [classes, setClasses] = useState<ClassesType[]>([])
 
-  async function getTeachers(queryName: string) {
+  async function getClasses(queryName: string) {
     setLoading(true)
-    let tempTeachers: TeacherType[] = []
+    let tempClasses: ClassesType[] = []
 
     switch (true) {
       case queryName !== '':
-        const { data: data4 } = await api.get(`/teacher?name=${queryName}`)
-        tempTeachers = data4.teachers
+        const { data: data4 } = await api.get(`/class?name=${queryName}`)
+        tempClasses = data4.classes
         break
       case queryName === '':
-        const { data: data1 } = await api.get('/teacher')
-        tempTeachers = data1.teachers
+        const { data: data1 } = await api.get('/class')
+        tempClasses = data1.classes
         break
       default:
         break
     }
 
-    setTeachers(tempTeachers)
+    setClasses(tempClasses)
     setLoading(false)
   }
 
-  async function createTeacher(teacherData: any) {
-    async function postTeacher() {
-      await api.post(`/teacher`, teacherData)
+  async function createClass(classData: any) {
+    async function postClass() {
+      await api.post(`/class`, classData)
     }
 
     try {
-      const myPromise = postTeacher()
+      const myPromise = postClass()
       toast.promise(myPromise, {
-        loading: 'Criando professor...',
-        success: 'Professor criado!',
+        loading: 'Criando Turma...',
+        success: 'Turma criada!',
         error: 'Houve um erro!',
       })
       await myPromise
-      setOpenTeacherModal(false)
-      await getTeachers('')
+      setOpenClassModal(false)
+      await getClasses('')
     } catch (error) {
       console.log(error)
     }
   }
 
   useEffect(() => {
-    getTeachers(queryName)
+    getClasses(queryName)
   }, [queryName])
 
   return (
@@ -71,15 +71,15 @@ export default function TeachersAdminPage() {
         <SearchField value={queryName} onChange={setQueryName} />
         <div className="w-full max-w-[150px]">
           <Button
-            onClick={() => setOpenTeacherModal(true)}
+            onClick={() => setOpenClassModal(true)}
             type="button"
-            value="Novo Professor"
+            value="Nova Turma"
           />
-          {openTeacherModal && (
-            <NewTeacherModal
-              modal={openTeacherModal}
-              setOpenModal={setOpenTeacherModal}
-              createTeacher={createTeacher}
+          {openClassModal && (
+            <NewClassModal
+              modal={openClassModal}
+              setOpenModal={setOpenClassModal}
+              createClass={createClass}
             />
           )}
         </div>
@@ -87,21 +87,25 @@ export default function TeachersAdminPage() {
       <div className="rounded-lg border-x-2 border-gray-200 dark:border-zinc-600">
         <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
           <THead
-            heads={['Nome', 'Telefone', 'Email', 'CPF', 'RG', 'Detalhes']}
+            heads={[
+              'Nome',
+              'Início',
+              'Término',
+              'Período',
+              'Status',
+              'Detalhes',
+            ]}
           />
           {loading ? (
             <TBodySkeleton />
           ) : (
-            <TeacherTBody
-              teachers={teachers}
-              setCurrentOpenId={setCurrentOpenId}
-            />
+            <ClassTBody classes={classes} setCurrentOpenId={setCurrentOpenId} />
           )}
         </table>
-        <TeacherDetails
+        <ClassDetails
           detailsOpenId={currentOpenId}
           setDetailsOpenId={setCurrentOpenId}
-          updateTable={getTeachers}
+          updateTable={getClasses}
         />
       </div>
     </div>

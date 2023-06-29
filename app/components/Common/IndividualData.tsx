@@ -6,7 +6,7 @@ import 'dayjs/locale/pt-br'
 
 interface IndividualDataProps {
   label: string
-  value: string | number
+  value: any
   password?: boolean
   date?: boolean
   textarea?: boolean

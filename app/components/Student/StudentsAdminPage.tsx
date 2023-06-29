@@ -5,7 +5,7 @@ import { api } from '@/app/lib/api'
 import { StudentType } from '@/app/types/student'
 import { useEffect, useState } from 'react'
 import { NewStudentModal } from './NewStudentModal'
-import { StudentTHead } from './StudentTHead'
+import { THead } from '../Common/THead'
 import SearchField from '../Common/SearchField'
 import BasicSelect, { ClassesType } from '../Common/BasicSelect'
 import Button from '../Common/Button'
@@ -111,7 +111,17 @@ export default function StudentsAdminPage() {
       </div>
       <div className="rounded-lg border-x-2 border-gray-200 dark:border-zinc-600">
         <table className="block w-full border-collapse overflow-hidden rounded-lg lg:table">
-          <StudentTHead />
+          <THead
+            heads={[
+              'Nome',
+              'Turma',
+              'Telefone',
+              'Email',
+              'Status',
+              'Detalhes',
+              'Links',
+            ]}
+          />
           {loading ? (
             <TBodySkeleton />
           ) : (

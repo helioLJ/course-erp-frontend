@@ -65,10 +65,10 @@ export function IndividualDataForm({
         }`}
       >
         {date ? (
-          <input
-            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-2 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
-            type="date"
-            defaultValue={value && value.toISOString().split('T')[0]}
+          <InputMask
+            className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
+            mask="99/99/9999"
+            placeholder="00/00/0000"
             {...register(`${registerName}`)}
           />
         ) : password ? (

@@ -102,7 +102,7 @@ export default function StudentDetails({
     <div
       className={`${
         isOpen ? '-translate-x-[450px]' : null
-      } absolute -right-[450px] top-0 z-50 flex h-full w-full max-w-[450px] border-2 border-gray-200 bg-white transition-transform dark:border-zinc-600 dark:bg-zinc-800`}
+      } fixed -right-[450px] top-0 z-50 flex h-full w-full max-w-[450px] border-2 border-gray-200 bg-white transition-transform dark:border-zinc-600 dark:bg-zinc-800`}
     >
       <div className="relative flex h-full w-full justify-center py-6 dark:border-zinc-600 dark:bg-zinc-700">
         <div className="w-full space-y-5 px-6">

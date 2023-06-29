@@ -5,56 +5,54 @@ import { IndividualData } from '../Common/IndividualData'
 import { toast } from 'react-hot-toast'
 import Image from 'next/image'
 import UserImg from '../../assets/User.png'
-import { TeacherEditForm } from './TeacherEditForm'
-import { TeacherType } from '@/app/types/teacher'
 import { DetailsModalButtons } from '../Common/DetailsModalButtons'
+import { ClassEditForm } from './ClassEditForm'
+import { ClassesType } from '@/app/types/classes'
 
-interface TeacherDetailsModalProps {
+interface ClassDetailsModalProps {
   detailsOpenId: string
   setDetailsOpenId: Dispatch<SetStateAction<string>>
   updateTable: (queryName: string) => Promise<void>
 }
 
-export default function TeacherDetails({
+export default function ClassDetails({
   detailsOpenId,
   setDetailsOpenId,
   updateTable,
-}: TeacherDetailsModalProps) {
+}: ClassDetailsModalProps) {
   const [editing, setEditing] = useState(false)
   const handleClose = () => setDetailsOpenId('')
-  const [teacherData, setTeacherData] = useState<TeacherType>({
+  const [classData, setClassData] = useState<ClassesType>({
     id: '',
-    email: '',
-    password: '',
     name: '',
-    phone: '',
-    CPF: '',
-    RG: '',
+    period: '',
+    start_day: new Date(),
+    end_day: new Date(),
   })
 
   const isOpen = detailsOpenId !== ''
 
-  async function getTeacher() {
+  async function getClass() {
     if (detailsOpenId !== '') {
-      const { data } = await api.get(`/teacher/${detailsOpenId}`)
-      setTeacherData(data.teacher)
+      const { data } = await api.get(`/class/${detailsOpenId}`)
+      setClassData(data.classItem)
     }
   }
 
-  async function updateTeacher(teacherData: any) {
-    async function putTeacher() {
-      await api.put(`/teacher/${detailsOpenId}`, teacherData)
+  async function updateClass(classData: any) {
+    async function putClass() {
+      await api.put(`/class/${detailsOpenId}`, classData)
     }
 
     try {
-      const myPromise = putTeacher()
+      const myPromise = putClass()
       toast.promise(myPromise, {
-        loading: 'Editando perfil...',
-        success: 'Perfil editado!',
+        loading: 'Editando turma...',
+        success: 'Turma editado!',
         error: 'Houve um erro!',
       })
       await myPromise
-      getTeacher()
+      getClass()
       setEditing(false)
       updateTable('')
     } catch (error) {
@@ -62,17 +60,17 @@ export default function TeacherDetails({
     }
   }
 
-  async function deleteTeacher() {
-    async function deleteTeacher() {
-      await api.delete(`/teacher/${detailsOpenId}`)
+  async function deleteClass() {
+    async function deleteClass() {
+      await api.delete(`/class/${detailsOpenId}`)
     }
 
     try {
-      const myPromise = deleteTeacher()
+      const myPromise = deleteClass()
       toast.promise(myPromise, {
         loading: 'Deletando...',
         success: 'Deletado com sucesso!',
-        error: 'Houve um erro!',
+        error: 'Você não pode deletar essa turma pois existem alunos nela!',
       })
       await myPromise
       updateTable('')
@@ -83,7 +81,7 @@ export default function TeacherDetails({
   }
 
   useEffect(() => {
-    getTeacher()
+    getClass()
   }, [detailsOpenId])
 
   return (
@@ -99,13 +97,13 @@ export default function TeacherDetails({
               editing={editing}
               setEditing={setEditing}
               handleClose={handleClose}
-              deleteUser={deleteTeacher}
+              deleteUser={deleteClass}
             />
           </div>
           {!editing ? (
             <>
               <div className="pb-6 text-center">
-                {teacherData.name === '' ? (
+                {classData.name === '' ? (
                   <>
                     <h1 className="text-3xl font-bold">Carregando...</h1>
                     <span className="text-zinc-400">Carregando...</span>
@@ -113,31 +111,29 @@ export default function TeacherDetails({
                 ) : (
                   <div className="flex flex-col items-center gap-4">
                     <Image src={UserImg} alt="Ícone de Estudante" />
-                    <h1 className="text-3xl font-bold">{teacherData.name}</h1>
+                    <h1 className="text-3xl font-bold">{classData.name}</h1>
                   </div>
                 )}
               </div>
               <div className="flex w-full">
-                <IndividualData label="Email" value={teacherData.email} />
                 <IndividualData
-                  label="Senha"
-                  value={teacherData.password}
-                  password
+                  label="Início"
+                  date
+                  value={classData.start_day}
+                />
+                <IndividualData
+                  label="Término"
+                  date
+                  value={classData.end_day}
                 />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Telefone" value={teacherData.phone} />
-              </div>
-              <div className="flex w-full">
-                <IndividualData label="CPF" value={teacherData.CPF} />
-                <IndividualData label="RG" value={teacherData.RG} />
+                <IndividualData label="Período" value={classData.period} />
+                <IndividualData label="Status" value={classData.period} />
               </div>
             </>
           ) : (
-            <TeacherEditForm
-              teacherData={teacherData}
-              updateTeacher={updateTeacher}
-            />
+            <ClassEditForm classData={classData} updateClass={updateClass} />
           )}
         </div>
       </div>
