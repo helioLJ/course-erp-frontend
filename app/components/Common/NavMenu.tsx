@@ -55,11 +55,11 @@ export default function NavMenu() {
           </li>
           <li
             className={`${
-              pathname === '/subjects' &&
+              pathname === '/disciplina' &&
               'border-b-2 border-green-500 font-bold text-zinc-800 dark:text-white'
             } flex h-9 items-center px-5 transition-colors hover:text-green-500`}
           >
-            <Link href="#">Disciplinas</Link>
+            <Link href="disciplina">Disciplinas</Link>
           </li>
         </ul>
       </nav>
