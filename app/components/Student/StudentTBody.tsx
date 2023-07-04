@@ -3,7 +3,7 @@ import { StudentType } from '@/app/types/student'
 import StudentRow from './StudentRow'
 
 interface StudentTBodyProps {
-  students: StudentType[]
+  students: StudentType[] | undefined
   setCurrentOpenId: Dispatch<SetStateAction<string>>
 }
 
@@ -13,18 +13,17 @@ export function StudentTBody({
 }: StudentTBodyProps) {
   return (
     <tbody className="block lg:table-row-group">
-      {!!students &&
-        students.map((student: StudentType) => (
-          <StudentRow
-            key={student.id}
-            id={student.id}
-            name={student.name}
-            className={student.class.name}
-            email={student.email}
-            phone={student.phone}
-            setCurrentOpenId={setCurrentOpenId}
-          />
-        ))}
+      {students?.map((student: StudentType) => (
+        <StudentRow
+          key={student.id}
+          id={student.id}
+          name={student.name}
+          className={student.class.name}
+          email={student.email}
+          phone={student.phone}
+          setCurrentOpenId={setCurrentOpenId}
+        />
+      ))}
     </tbody>
   )
 }

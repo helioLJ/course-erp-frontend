@@ -52,7 +52,6 @@ export function ClassEditForm({ classData, updateClass }: ClassEditFormProps) {
 
   function handleUpdate(data: handleUpdateFormData) {
     updateClass(data)
-    console.log(data)
   }
 
   return (

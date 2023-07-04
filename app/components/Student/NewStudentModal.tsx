@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { createStudent } from '@/app/utils/student/createStudent'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -27,7 +28,6 @@ const style = {
 interface NewStudentModalProps {
   setOpenModal: any
   modal: boolean
-  createStudent: (studentData: {}) => void
 }
 
 const handleCreateFormSchema = z.object({
@@ -63,11 +63,7 @@ const handleCreateFormSchema = z.object({
 
 type handleCreateFormData = z.infer<typeof handleCreateFormSchema>
 
-export function NewStudentModal({
-  setOpenModal,
-  modal,
-  createStudent,
-}: NewStudentModalProps) {
+export function NewStudentModal({ setOpenModal, modal }: NewStudentModalProps) {
   const handleClose = () => setOpenModal(false)
 
   const {
@@ -85,6 +81,7 @@ export function NewStudentModal({
     }
 
     createStudent(updatedData)
+    handleClose()
   }
 
   return (

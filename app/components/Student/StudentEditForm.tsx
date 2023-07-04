@@ -46,7 +46,7 @@ const handleUpdateFormSchema = z.object({
 type handleUpdateFormData = z.infer<typeof handleUpdateFormSchema>
 
 interface StudentEditFormProps {
-  studentData: StudentBody
+  studentData: StudentBody | undefined
   updateStudent: (studentData: handleUpdateFormData) => Promise<void>
 }
 
@@ -61,25 +61,26 @@ export function StudentEditForm({
   } = useForm<handleUpdateFormData>({
     resolver: zodResolver(handleUpdateFormSchema),
     defaultValues: {
-      name: studentData.name,
-      classId: studentData.classId,
-      email: studentData.email,
-      password: studentData.password,
-      status: studentData.status,
-      phone: studentData.phone,
-      address: studentData.address,
-      CPF: studentData.CPF,
-      RG: studentData.RG,
-      registration_number: studentData.registration_number,
-      father: studentData.father,
-      mother: studentData.mother,
-      observations: studentData.observations,
+      name: studentData?.name,
+      classId: studentData?.classId,
+      email: studentData?.email,
+      password: studentData?.password,
+      status: studentData?.status,
+      phone: studentData?.phone,
+      address: studentData?.address,
+      CPF: studentData?.CPF,
+      RG: studentData?.RG,
+      registration_number: studentData?.registration_number,
+      father: studentData?.father,
+      mother: studentData?.mother,
+      observations: studentData?.observations,
     },
   })
 
-  const studentBirthday = studentData.birthday && new Date(studentData.birthday)
+  const studentBirthday =
+    studentData?.birthday && new Date(studentData?.birthday)
   const studentRegistrationDay =
-    studentData.registration_day && new Date(studentData.registration_day)
+    studentData?.registration_day && new Date(studentData?.registration_day)
 
   function handleUpdate(data: handleUpdateFormData) {
     updateStudent(data)
@@ -131,7 +132,7 @@ export function StudentEditForm({
           label="Status"
           register={register}
           registerName="status"
-          value={studentData.status}
+          value={studentData?.status}
           selectStatus
         />
       </div>

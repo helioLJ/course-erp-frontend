@@ -1,4 +1,3 @@
-'use client'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
@@ -10,6 +9,8 @@ import { IndividualDataForm } from '../Common/IndividualDataForm'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SelectStudent } from '../Inputs/SelectStudent'
+import { SelectSubject } from '../Inputs/SelectSubject'
+import { InputNumber } from '../Inputs/InputNumber'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,12 +29,12 @@ const style = {
 
 interface NewGradeModalProps {
   setOpenModal: any
-  modal: boolean
+  modalBoolean: boolean
   createGrade: (gradeData: any) => void
 }
 
 const handleCreateFormSchema = z.object({
-  grade: z.number(),
+  grade: z.coerce.number(),
   frequency: z.string().nonempty('Campo obrigatório.'),
   studentId: z.string().nonempty('Campo obrigatório.'),
   subjectId: z.string().nonempty('Campo obrigatório.'),
@@ -43,7 +44,7 @@ type handleCreateFormData = z.infer<typeof handleCreateFormSchema>
 
 export function NewGradeModal({
   setOpenModal,
-  modal,
+  modalBoolean,
   createGrade,
 }: NewGradeModalProps) {
   const handleClose = () => setOpenModal(false)
@@ -65,7 +66,7 @@ export function NewGradeModal({
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={modal}
+        open={modalBoolean}
         onClose={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
@@ -75,28 +76,27 @@ export function NewGradeModal({
           },
         }}
       >
-        <Fade in={modal}>
+        <Fade in={modalBoolean}>
           <Box sx={style} className="dark:bg-zinc-800">
             <form className="space-y-4" onSubmit={handleSubmit(handleCreate)}>
               <div className="flex w-full justify-between gap-4">
-                <SelectStudent register={register} registerName="studentId" />
-                <IndividualDataForm
+                <SelectStudent
+                  label="Aluno"
+                  register={register}
+                  registerName="studentId"
+                />
+                <SelectSubject
                   label="Disciplina"
-                  mandatory
                   register={register}
                   registerName="subjectId"
-                  errors={errors.subjectId}
-                  selectStatus
                 />
+                {/* errors={errors.grade} */}
               </div>
               <div className="flex w-full justify-between gap-4">
-                <IndividualDataForm
+                <InputNumber
                   label="Nota"
-                  mandatory
                   register={register}
                   registerName="grade"
-                  errors={errors.grade}
-                  // number
                 />
                 <IndividualDataForm
                   label="Frequência"

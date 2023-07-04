@@ -1,38 +1,38 @@
-'use client'
-import { api } from '@/app/lib/api'
 import { StudentType } from '@/app/types/student'
-import { useEffect, useState } from 'react'
 import { UseFormRegister } from 'react-hook-form'
+import { InputWrapper } from './InputWrapper'
+import { useQuery } from '@tanstack/react-query'
+import { getStudents } from '@/app/utils/student/getStudents'
 
 interface SelectStudentProps {
+  label: string
   register: UseFormRegister<any>
   registerName: string
 }
 
-export function SelectStudent({ register, registerName }: SelectStudentProps) {
-  const [data, setData] = useState<StudentType[] | []>([])
-
-  async function getStudent() {
-    const { data } = await api.get('/student')
-    setData(data.students)
-  }
-
-  useEffect(() => {
-    getStudent()
-  }, [])
+export function SelectStudent({
+  label,
+  register,
+  registerName,
+}: SelectStudentProps) {
+  const { data } = useQuery({
+    queryKey: ['studentsList', { queryName: '', classId: '' }],
+    queryFn: () => getStudents('', ''),
+  })
 
   return (
-    <select
-      className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
-      {...register(`${registerName}`)}
-    >
-      <option value="">Selecione Aluno</option>
-      {data &&
-        data.map((student: StudentType) => (
+    <InputWrapper mandatory label={label}>
+      <select
+        className="w-full rounded-xl border-2 border-gray-200 bg-gray-100 p-3 placeholder:text-zinc-400 dark:border-zinc-600 dark:bg-zinc-700"
+        {...register(`${registerName}`)}
+      >
+        <option value="">Selecione Aluno</option>
+        {data?.map((student: StudentType) => (
           <option key={student.id} value={student.id}>
             {student.name}
           </option>
         ))}
-    </select>
+      </select>
+    </InputWrapper>
   )
 }

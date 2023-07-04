@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { api } from '@/app/lib/api'
-import { IndividualData } from '../Common/IndividualData'
 import { toast } from 'react-hot-toast'
 import Image from 'next/image'
 import UserImg from '../../assets/User.png'

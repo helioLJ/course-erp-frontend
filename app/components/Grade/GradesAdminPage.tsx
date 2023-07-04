@@ -36,8 +36,6 @@ export default function GradesAdminPage() {
       default:
         break
     }
-
-    console.log(tempGrades)
     setGrades(tempGrades)
     setLoading(false)
   }
@@ -78,7 +76,7 @@ export default function GradesAdminPage() {
           />
           {openGradeModal && (
             <NewGradeModal
-              modal={openGradeModal}
+              modalBoolean={openGradeModal}
               setOpenModal={setOpenGradeModal}
               createGrade={createGrade}
             />

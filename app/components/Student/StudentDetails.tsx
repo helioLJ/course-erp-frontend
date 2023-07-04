@@ -12,7 +12,7 @@ import { DetailsModalButtons } from '../Common/DetailsModalButtons'
 interface StudentDetailsModalProps {
   detailsOpenId: string
   setDetailsOpenId: Dispatch<SetStateAction<string>>
-  updateTable: (queryName: string, queryClassId: string) => Promise<void>
+  updateTable?: (queryName: string, queryClassId: string) => Promise<void>
 }
 
 export default function StudentDetails({
@@ -22,27 +22,9 @@ export default function StudentDetails({
 }: StudentDetailsModalProps) {
   const [editing, setEditing] = useState(false)
   const handleClose = () => setDetailsOpenId('')
-  const [studentData, setStudentData] = useState<StudentType>({
-    id: '',
-    email: '',
-    password: '',
-    name: '',
-    status: '',
-    phone: '',
-    birthday: '',
-    CPF: '',
-    RG: '',
-    address: '',
-    father: '',
-    mother: '',
-    observations: '',
-    registration_day: '',
-    registration_number: 0,
-    classId: '',
-    class: {
-      name: '',
-    },
-  })
+  const [studentData, setStudentData] = useState<StudentType | undefined>(
+    undefined,
+  )
 
   const isOpen = detailsOpenId !== ''
 
@@ -57,9 +39,9 @@ export default function StudentDetails({
     async function putStudent() {
       await api.put(`/student/${detailsOpenId}`, studentData)
     }
+    const myPromise = putStudent()
 
     try {
-      const myPromise = putStudent()
       toast.promise(myPromise, {
         loading: 'Editando perfil...',
         success: 'Perfil editado!',
@@ -68,7 +50,6 @@ export default function StudentDetails({
       await myPromise // Aguarda a conclusão da criação do estudante
       getStudent()
       setEditing(false)
-      updateTable('', '')
     } catch (error) {
       console.log(error)
     }
@@ -87,7 +68,6 @@ export default function StudentDetails({
         error: 'Houve um erro!',
       })
       await myPromise // Aguarda a conclusão da criação do estudante
-      updateTable('', '')
       handleClose()
     } catch (error) {
       console.log(error)
@@ -117,7 +97,7 @@ export default function StudentDetails({
           {!editing ? (
             <>
               <div className="pb-6 text-center">
-                {studentData.name === '' && studentData.class.name === '' ? (
+                {studentData?.name === '' && studentData?.class.name === '' ? (
                   <>
                     <h1 className="text-3xl font-bold">Carregando...</h1>
                     <span className="text-zinc-400">Carregando...</span>
@@ -125,56 +105,56 @@ export default function StudentDetails({
                 ) : (
                   <div className="flex flex-col items-center gap-4">
                     <Image src={UserImg} alt="Ícone de Estudante" />
-                    <h1 className="text-3xl font-bold">{studentData.name}</h1>
+                    <h1 className="text-3xl font-bold">{studentData?.name}</h1>
                     <span className="text-zinc-400">
-                      {studentData.class.name}
+                      {studentData?.class.name}
                     </span>
                   </div>
                 )}
               </div>
               <div className="flex w-full">
-                <IndividualData label="Email" value={studentData.email} />
+                <IndividualData label="Email" value={studentData?.email} />
                 <IndividualData
                   label="Senha"
-                  value={studentData.password}
+                  value={studentData?.password}
                   password
                 />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Status" value={studentData.status} />
-                <IndividualData label="Telefone" value={studentData.phone} />
+                <IndividualData label="Status" value={studentData?.status} />
+                <IndividualData label="Telefone" value={studentData?.phone} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Data de Nascimento"
-                  value={studentData.birthday}
+                  value={studentData?.birthday}
                   date
                 />
-                <IndividualData label="Endereço" value={studentData.address} />
+                <IndividualData label="Endereço" value={studentData?.address} />
               </div>
               <div className="flex w-full">
-                <IndividualData label="CPF" value={studentData.CPF} />
-                <IndividualData label="RG" value={studentData.RG} />
+                <IndividualData label="CPF" value={studentData?.CPF} />
+                <IndividualData label="RG" value={studentData?.RG} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Núm. de Matrí."
-                  value={studentData.registration_number}
+                  value={studentData?.registration_number}
                 />
                 <IndividualData
                   label="Data de Matrí."
-                  value={studentData.registration_day}
+                  value={studentData?.registration_day}
                   date
                 />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Pai" value={studentData.father} />
-                <IndividualData label="Mãe" value={studentData.mother} />
+                <IndividualData label="Pai" value={studentData?.father} />
+                <IndividualData label="Mãe" value={studentData?.mother} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Observações"
-                  value={studentData.observations}
+                  value={studentData?.observations}
                   textarea
                 />
               </div>

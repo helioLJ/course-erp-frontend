@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+import { api } from '@/app/lib/api'
+import { useEffect, useState } from 'react'
 
 export interface ClassesType {
   id: string
@@ -12,7 +13,6 @@ export interface ClassesType {
 interface BasicSelectProps {
   value: { name: string; id: string }
   onChange: any
-  data: ClassesType[]
   initialValue?: { name: string; id: string }
   all?: boolean
 }
@@ -20,7 +20,6 @@ interface BasicSelectProps {
 export default function BasicSelect({
   value,
   onChange,
-  data,
   initialValue,
   all = true,
 }: BasicSelectProps) {
@@ -30,7 +29,7 @@ export default function BasicSelect({
       onChange({ name: selectedName, id: '' })
       return
     }
-    const selectedClass = data.find(
+    const selectedClass = classes.find(
       (classObj: ClassesType) => classObj.name === selectedName,
     )
 
@@ -40,10 +39,18 @@ export default function BasicSelect({
     }
   }
 
+  const [classes, setClasses] = useState<ClassesType[]>([])
+
+  async function getClasses() {
+    const { data } = await api.get('/class')
+    setClasses(data.classes)
+  }
+
   useEffect(() => {
     if (initialValue) {
       onChange(initialValue)
     }
+    getClasses()
   }, [])
 
   return (
@@ -53,8 +60,8 @@ export default function BasicSelect({
       onChange={handleChange}
     >
       {all && <option value="Todas">Todas</option>}
-      {data &&
-        data.map((classObj: ClassesType) => (
+      {classes &&
+        classes.map((classObj: ClassesType) => (
           <option key={classObj.id} value={classObj.name}>
             {classObj.name}
           </option>
