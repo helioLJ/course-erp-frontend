@@ -8,7 +8,7 @@ interface DetailsModalButtonsProps {
   editing: boolean
   setEditing: (value: SetStateAction<boolean>) => void
   handleClose: () => any
-  deleteUser: () => Promise<void>
+  deleteUser: (() => Promise<void>) | (() => void)
 }
 
 export function DetailsModalButtons({

@@ -1,82 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { StudentEditForm } from './StudentEditForm'
-import { api } from '@/app/lib/api'
 import { IndividualData } from '../Common/IndividualData'
-import { StudentType } from '@/app/types/student'
-import { toast } from 'react-hot-toast'
 import Image from 'next/image'
 import UserImg from '../../assets/User.png'
 import { DetailsModalButtons } from '../Common/DetailsModalButtons'
+import { getStudent } from '@/app/utils/student/getStudent'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { StudentType } from '@/app/types/student'
+import { deleteStudent } from '@/app/utils/student/deleteStudent'
 
 interface StudentDetailsModalProps {
   detailsOpenId: string
   setDetailsOpenId: Dispatch<SetStateAction<string>>
-  updateTable?: (queryName: string, queryClassId: string) => Promise<void>
 }
 
 export default function StudentDetails({
   detailsOpenId,
   setDetailsOpenId,
-  updateTable,
 }: StudentDetailsModalProps) {
   const [editing, setEditing] = useState(false)
   const handleClose = () => setDetailsOpenId('')
-  const [studentData, setStudentData] = useState<StudentType | undefined>(
-    undefined,
-  )
-
   const isOpen = detailsOpenId !== ''
+  const queryClient = useQueryClient()
 
-  async function getStudent() {
-    if (detailsOpenId !== '') {
-      const { data } = await api.get(`/student/${detailsOpenId}`)
-      setStudentData(data.student)
-    }
+  const { data } = useQuery<StudentType>({
+    queryKey: ['currentStudent', detailsOpenId],
+    queryFn: () => getStudent(detailsOpenId),
+  })
+
+  const deleteStudentMutation = useMutation({
+    mutationFn: deleteStudent,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['studentsList'])
+    },
+  })
+
+  function handleDelete() {
+    deleteStudentMutation.mutate(detailsOpenId)
+    handleClose()
   }
-
-  async function updateStudent(studentData: any) {
-    async function putStudent() {
-      await api.put(`/student/${detailsOpenId}`, studentData)
-    }
-    const myPromise = putStudent()
-
-    try {
-      toast.promise(myPromise, {
-        loading: 'Editando perfil...',
-        success: 'Perfil editado!',
-        error: 'Houve um erro!',
-      })
-      await myPromise // Aguarda a conclusão da criação do estudante
-      getStudent()
-      setEditing(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function deleteStudent() {
-    async function deleteStudent() {
-      await api.delete(`/student/${detailsOpenId}`)
-    }
-
-    try {
-      const myPromise = deleteStudent()
-      toast.promise(myPromise, {
-        loading: 'Deletando...',
-        success: 'Deletado com sucesso!',
-        error: 'Houve um erro!',
-      })
-      await myPromise // Aguarda a conclusão da criação do estudante
-      handleClose()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getStudent()
-  }, [detailsOpenId])
 
   return (
     <div
@@ -91,13 +54,13 @@ export default function StudentDetails({
               editing={editing}
               setEditing={setEditing}
               handleClose={handleClose}
-              deleteUser={deleteStudent}
+              deleteUser={handleDelete}
             />
           </div>
           {!editing ? (
             <>
               <div className="pb-6 text-center">
-                {studentData?.name === '' && studentData?.class.name === '' ? (
+                {data?.name === '' && data?.class?.name === '' ? (
                   <>
                     <h1 className="text-3xl font-bold">Carregando...</h1>
                     <span className="text-zinc-400">Carregando...</span>
@@ -105,65 +68,56 @@ export default function StudentDetails({
                 ) : (
                   <div className="flex flex-col items-center gap-4">
                     <Image src={UserImg} alt="Ícone de Estudante" />
-                    <h1 className="text-3xl font-bold">{studentData?.name}</h1>
-                    <span className="text-zinc-400">
-                      {studentData?.class.name}
-                    </span>
+                    <h1 className="text-3xl font-bold">{data?.name}</h1>
+                    <span className="text-zinc-400">{data?.class?.name}</span>
                   </div>
                 )}
               </div>
               <div className="flex w-full">
-                <IndividualData label="Email" value={studentData?.email} />
-                <IndividualData
-                  label="Senha"
-                  value={studentData?.password}
-                  password
-                />
+                <IndividualData label="Email" value={data?.email} />
+                <IndividualData label="Senha" value={data?.password} password />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Status" value={studentData?.status} />
-                <IndividualData label="Telefone" value={studentData?.phone} />
+                <IndividualData label="Status" value={data?.status} />
+                <IndividualData label="Telefone" value={data?.phone} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Data de Nascimento"
-                  value={studentData?.birthday}
+                  value={data?.birthday}
                   date
                 />
-                <IndividualData label="Endereço" value={studentData?.address} />
+                <IndividualData label="Endereço" value={data?.address} />
               </div>
               <div className="flex w-full">
-                <IndividualData label="CPF" value={studentData?.CPF} />
-                <IndividualData label="RG" value={studentData?.RG} />
+                <IndividualData label="CPF" value={data?.CPF} />
+                <IndividualData label="RG" value={data?.RG} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Núm. de Matrí."
-                  value={studentData?.registration_number}
+                  value={data?.registration_number}
                 />
                 <IndividualData
                   label="Data de Matrí."
-                  value={studentData?.registration_day}
+                  value={data?.registration_day}
                   date
                 />
               </div>
               <div className="flex w-full">
-                <IndividualData label="Pai" value={studentData?.father} />
-                <IndividualData label="Mãe" value={studentData?.mother} />
+                <IndividualData label="Pai" value={data?.father} />
+                <IndividualData label="Mãe" value={data?.mother} />
               </div>
               <div className="flex w-full">
                 <IndividualData
                   label="Observações"
-                  value={studentData?.observations}
+                  value={data?.observations}
                   textarea
                 />
               </div>
             </>
           ) : (
-            <StudentEditForm
-              studentData={studentData}
-              updateStudent={updateStudent}
-            />
+            <StudentEditForm studentData={data} handleClose={handleClose} />
           )}
         </div>
       </div>

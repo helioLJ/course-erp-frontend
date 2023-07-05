@@ -7,11 +7,11 @@ import { Banknote, Eye, GraduationCap } from 'lucide-react'
 import DefaultCell from '../Common/DefaultCell'
 
 interface StudentRowProps {
-  name: string
-  className: string
-  phone: string
-  email: string
-  id: string
+  name?: string
+  className?: string
+  phone?: string
+  email?: string
+  id?: string
   setCurrentOpenId: Dispatch<SetStateAction<string>>
 }
 
@@ -40,7 +40,7 @@ export default function StudentRow({
         <div className="flex items-center justify-end gap-4 lg:justify-start">
           <button
             onClick={() => {
-              setCurrentOpenId(id)
+              setCurrentOpenId(id ?? '')
             }}
           >
             <Eye className="text-green-500" />

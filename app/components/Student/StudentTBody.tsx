@@ -18,7 +18,7 @@ export function StudentTBody({
           key={student.id}
           id={student.id}
           name={student.name}
-          className={student.class.name}
+          className={student?.class?.name}
           email={student.email}
           phone={student.phone}
           setCurrentOpenId={setCurrentOpenId}

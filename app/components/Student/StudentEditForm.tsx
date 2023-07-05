@@ -1,9 +1,11 @@
 import { IndividualDataForm } from '../Common/IndividualDataForm'
 import Button from '../Common/Button'
-import { StudentBody } from '@/app/types/studentBody'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { StudentType } from '@/app/types/student'
+import { updateStudent } from '@/app/utils/student/updateStudent'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const handleUpdateFormSchema = z.object({
   name: z
@@ -46,13 +48,13 @@ const handleUpdateFormSchema = z.object({
 type handleUpdateFormData = z.infer<typeof handleUpdateFormSchema>
 
 interface StudentEditFormProps {
-  studentData: StudentBody | undefined
-  updateStudent: (studentData: handleUpdateFormData) => Promise<void>
+  studentData: StudentType | undefined
+  handleClose: () => void
 }
 
 export function StudentEditForm({
   studentData,
-  updateStudent,
+  handleClose,
 }: StudentEditFormProps) {
   const {
     register,
@@ -76,14 +78,21 @@ export function StudentEditForm({
       observations: studentData?.observations,
     },
   })
+  const queryClient = useQueryClient()
 
-  const studentBirthday =
-    studentData?.birthday && new Date(studentData?.birthday)
-  const studentRegistrationDay =
-    studentData?.registration_day && new Date(studentData?.registration_day)
+  const updateStudentMutation = useMutation({
+    mutationFn: updateStudent,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['studentsList'])
+    },
+  })
 
   function handleUpdate(data: handleUpdateFormData) {
-    updateStudent(data)
+    updateStudentMutation.mutate({
+      data,
+      id: studentData?.id,
+    })
+    handleClose()
   }
 
   return (
@@ -138,7 +147,6 @@ export function StudentEditForm({
       </div>
       <div className="flex w-full justify-between gap-4">
         <IndividualDataForm
-          value={studentBirthday}
           label="Data de Nascimento"
           date
           register={register}
@@ -166,7 +174,6 @@ export function StudentEditForm({
           type="number"
         />
         <IndividualDataForm
-          value={studentRegistrationDay}
           label="Data de Matrí."
           date
           register={register}

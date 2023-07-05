@@ -10,6 +10,7 @@ import { StudentTBody } from './StudentTBody'
 import { TBodySkeleton } from '../Common/TBodySkeleton'
 import { getStudents } from '@/app/utils/student/getStudents'
 import { useQuery } from '@tanstack/react-query'
+import { StudentType } from '@/app/types/student'
 
 export default function StudentsAdminPage() {
   const [openModal, setOpenModal] = useState(false)
@@ -19,8 +20,9 @@ export default function StudentsAdminPage() {
     name: '',
     id: '',
   })
+  // refactor this className state
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<StudentType[]>({
     queryKey: ['studentsList', { queryName, classId: classname.id }],
     queryFn: () => getStudents(queryName, classname.id),
   })
@@ -29,7 +31,9 @@ export default function StudentsAdminPage() {
     <div className="flex h-full flex-col">
       <div className="mb-4 mt-36 flex items-center justify-between gap-5">
         <SearchField value={queryName} onChange={setQueryName} />
+        {/* Refactor this Basic Select */}
         <BasicSelect value={classname} onChange={setClassname} />
+        {/* Create a 'size' prop */}
         <div className="w-full max-w-[150px]">
           <Button
             onClick={() => setOpenModal(true)}
