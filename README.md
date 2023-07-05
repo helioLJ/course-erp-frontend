@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Portal Trilogia - Management System 🧑‍⚕️
 
-First, run the development server:
+The inspiration for this personal project was my mom's business. She owns a Nurse Technical Course and needs to manage it using software that is not as efficient as Word, Excel, or even the old paper system.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+So, using my Fullstack Developer skills, I am developing an end-to-end CRUD to solve administrative problems and handle student data, such as names, documents, payments, grades, and more.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project is still under development, but you can see some gifs below:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Obs: This repository is solely for the front-end, which consumes my own API created using Node.js.
+## Demonstration
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Obs: this is the Admin View, content and permissions are different for Admins, Students and Teachers.
 
-## Learn More
+![Login](https://media3.giphy.com/media/YZXH8ZADixsqxhH8Mi/giphy.gif)
+![Search](https://media0.giphy.com/media/ofXxLbx6EADEz0qx6O/giphy.gif)
+![Updating and Deleting](https://media1.giphy.com/media/1d1eIoEEz1R4ZyHqj3/giphy.gif)
+![Creating](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjlhdGJmZ2dkanZsYzZiN3NqZDQwb2J2eXcwazZqa29lcGhyejN1ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9Uh4jBPhq0Rka23m9H/giphy.gif)
 
-To learn more about Next.js, take a look at the following resources:
+## Feedback
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you have any feedback, please let me know, my means of contact are available in my [site](https://helioportfolio.vercel.app/)!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- React, Next 13, TailwindCSS, Next-Auth, React-Query, React Hook Form, Zod, Axios
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
