@@ -33,7 +33,7 @@ export default function StudentsAdminPage() {
         <SearchField value={queryName} onChange={setQueryName} />
         {/* Refactor this Basic Select */}
         <BasicSelect value={classname} onChange={setClassname} />
-        {/* Create a 'size' prop */}
+        {/* Create a 'size' prop for button */}
         <div className="w-full max-w-[150px]">
           <Button
             onClick={() => setOpenModal(true)}

@@ -1,14 +1,16 @@
-import Button from '../Common/Button'
-import { useForm } from 'react-hook-form'
-import { IndividualDataForm } from '../Common/IndividualDataForm'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createStudent } from '@/app/utils/student/createStudent'
+import { Dispatch, SetStateAction } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+import Button from '../Common/Button'
+import { IndividualDataForm } from '../Common/IndividualDataForm'
+import { createStudent } from '@/app/utils/student/createStudent'
 import { FormModal } from '../Common/FormModal'
 
 interface NewStudentModalProps {
-  setOpenModal: any
+  setOpenModal: Dispatch<SetStateAction<boolean>>
   modal: boolean
 }
 

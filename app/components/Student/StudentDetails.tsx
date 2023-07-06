@@ -19,9 +19,9 @@ export default function StudentDetails({
   detailsOpenId,
   setDetailsOpenId,
 }: StudentDetailsModalProps) {
+  const isOpen = detailsOpenId !== ''
   const [editing, setEditing] = useState(false)
   const handleClose = () => setDetailsOpenId('')
-  const isOpen = detailsOpenId !== ''
   const queryClient = useQueryClient()
 
   const { data } = useQuery<StudentType>({
