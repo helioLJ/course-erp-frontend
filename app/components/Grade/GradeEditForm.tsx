@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { GradeType } from '@/app/types/grade'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateGrade } from '@/app/lib/grade/updateGrade'
 
 const handleUpdateFormSchema = z.object({
   grade: z.number(),
@@ -15,11 +17,11 @@ const handleUpdateFormSchema = z.object({
 type handleUpdateFormData = z.infer<typeof handleUpdateFormSchema>
 
 interface GradeEditFormProps {
-  gradeData: GradeType
-  updateGrade: (gradeData: handleUpdateFormData) => Promise<void>
+  gradeData: GradeType | undefined
+  handleClose: () => void
 }
 
-export function GradeEditForm({ gradeData, updateGrade }: GradeEditFormProps) {
+export function GradeEditForm({ gradeData, handleClose }: GradeEditFormProps) {
   const {
     register,
     handleSubmit,
@@ -27,15 +29,28 @@ export function GradeEditForm({ gradeData, updateGrade }: GradeEditFormProps) {
   } = useForm<handleUpdateFormData>({
     resolver: zodResolver(handleUpdateFormSchema),
     defaultValues: {
-      grade: gradeData.grade,
-      frequency: gradeData.frequency,
-      studentId: gradeData.student.id,
-      subjectId: gradeData.subject.id,
+      grade: gradeData?.grade,
+      frequency: gradeData?.frequency,
+      studentId: gradeData?.student?.id,
+      subjectId: gradeData?.subject?.id,
+    },
+  })
+
+  const queryClient = useQueryClient()
+
+  const updateGradeMutation = useMutation({
+    mutationFn: updateGrade,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['gradesList'])
     },
   })
 
   function handleUpdate(data: handleUpdateFormData) {
-    updateGrade(data)
+    updateGradeMutation.mutate({
+      data,
+      gradeId: gradeData?.id,
+    })
+    handleClose()
   }
 
   return (

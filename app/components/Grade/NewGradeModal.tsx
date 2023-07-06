@@ -11,6 +11,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SelectStudent } from '../Inputs/SelectStudent'
 import { SelectSubject } from '../Inputs/SelectSubject'
 import { InputNumber } from '../Inputs/InputNumber'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createGrade } from '@/app/lib/grade/createGrade'
+import { toast } from 'react-hot-toast'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -30,7 +33,6 @@ const style = {
 interface NewGradeModalProps {
   setOpenModal: any
   modalBoolean: boolean
-  createGrade: (gradeData: any) => void
 }
 
 const handleCreateFormSchema = z.object({
@@ -45,9 +47,10 @@ type handleCreateFormData = z.infer<typeof handleCreateFormSchema>
 export function NewGradeModal({
   setOpenModal,
   modalBoolean,
-  createGrade,
 }: NewGradeModalProps) {
   const handleClose = () => setOpenModal(false)
+  const queryClient = useQueryClient()
+  let createToastId: string
 
   const {
     register,
@@ -57,8 +60,22 @@ export function NewGradeModal({
     resolver: zodResolver(handleCreateFormSchema),
   })
 
+  const createGradeMutation = useMutation({
+    mutationFn: createGrade,
+    onError: (error) => {
+      console.log(error)
+      toast.error('Houve um erro!', { id: createToastId })
+    },
+    onSuccess: () => {
+      toast.success('Nota cadastrada com sucesso!', { id: createToastId })
+      queryClient.invalidateQueries(['gradesList'])
+    },
+  })
+
   function handleCreate(data: handleCreateFormData) {
-    createGrade(data)
+    createToastId = toast.loading('Cadastrando nota...', { id: createToastId })
+    createGradeMutation.mutate(data)
+    handleClose()
   }
 
   return (

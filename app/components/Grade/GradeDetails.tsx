@@ -1,96 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { api } from '@/app/lib/api'
-import { toast } from 'react-hot-toast'
+import { Dispatch, SetStateAction, useState } from 'react'
 import Image from 'next/image'
 import UserImg from '../../assets/User.png'
 import { DetailsModalButtons } from '../Common/DetailsModalButtons'
 import { GradeEditForm } from './GradeEditForm'
 import { GradeType } from '@/app/types/grade'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getStudentGrades } from '@/app/lib/grade/getStudentGrades'
+import { toast } from 'react-hot-toast'
+import { deleteGrade } from '@/app/lib/grade/deleteGrade'
 
 interface GradeDetailsModalProps {
   detailsOpenId: string
   setDetailsOpenId: Dispatch<SetStateAction<string>>
-  updateTable: (queryName: string) => Promise<void>
 }
+
+let loadingToastId: string
 
 export default function GradeDetails({
   detailsOpenId,
   setDetailsOpenId,
-  updateTable,
 }: GradeDetailsModalProps) {
+  const isOpen = detailsOpenId !== ''
   const [editing, setEditing] = useState(false)
   const handleClose = () => setDetailsOpenId('')
-  const [gradeData, setgradeData] = useState<GradeType>({
-    id: '',
-    grade: 0,
-    frequency: '',
-    student: {
-      id: '',
-      classId: '',
-      email: '',
-      name: '',
+  const queryClient = useQueryClient()
+
+  const { data } = useQuery<GradeType>({
+    queryKey: ['currentGrades', detailsOpenId],
+    queryFn: () => getStudentGrades(detailsOpenId),
+  })
+
+  const deleteGradeMutaion = useMutation({
+    mutationFn: deleteGrade,
+    onError: (error) => {
+      console.log(error)
+      toast.error('Houve um erro!', { id: loadingToastId })
     },
-    subject: {
-      id: '',
-      name: '',
+    onSuccess: () => {
+      toast.success('Nota deletada com sucesso!', { id: loadingToastId })
+      queryClient.invalidateQueries(['gradesList'])
     },
   })
 
-  const isOpen = detailsOpenId !== ''
-
-  async function getGrade() {
-    if (detailsOpenId !== '') {
-      const { data } = await api.get(`/grade/${detailsOpenId}`)
-      setgradeData(data.grade)
-      console.log(data)
-    }
+  function handleDelete() {
+    loadingToastId = toast.loading('Deletando nota...')
+    deleteGradeMutaion.mutate(detailsOpenId)
+    handleClose()
   }
-
-  async function updateGrade(gradeData: any) {
-    async function putGrade() {
-      await api.put(`/grade/${detailsOpenId}`, gradeData)
-    }
-
-    try {
-      const myPromise = putGrade()
-      toast.promise(myPromise, {
-        loading: 'Editando nota...',
-        success: 'Nota editada!',
-        error: 'Houve um erro!',
-      })
-      await myPromise
-      getGrade()
-      setEditing(false)
-      updateTable('')
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function deleteGrade() {
-    async function deleteGrade() {
-      await api.delete(`/grade/${detailsOpenId}`)
-    }
-
-    try {
-      const myPromise = deleteGrade()
-      toast.promise(myPromise, {
-        loading: 'Deletando...',
-        success: 'Deletado com sucesso!',
-        error: 'Houve um erro!',
-      })
-      await myPromise
-      updateTable('')
-      handleClose()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getGrade()
-  }, [detailsOpenId])
 
   return (
     <div
@@ -105,13 +62,13 @@ export default function GradeDetails({
               editing={editing}
               setEditing={setEditing}
               handleClose={handleClose}
-              deleteUser={deleteGrade}
+              deleteUser={handleDelete}
             />
           </div>
           {!editing ? (
             <>
               <div className="pb-6 text-center">
-                {gradeData.student.name === '' ? (
+                {data?.student?.name === '' ? (
                   <>
                     <h1 className="text-3xl font-bold">Carregando...</h1>
                     <span className="text-zinc-400">Carregando...</span>
@@ -120,7 +77,7 @@ export default function GradeDetails({
                   <div className="flex flex-col items-center gap-4">
                     <Image src={UserImg} alt="Ícone de Estudante" />
                     <h1 className="text-3xl font-bold">
-                      {gradeData.student.name}
+                      {data?.student?.name}
                     </h1>
                   </div>
                 )}
@@ -128,7 +85,7 @@ export default function GradeDetails({
               <div className="flex w-full"></div>
             </>
           ) : (
-            <GradeEditForm gradeData={gradeData} updateGrade={updateGrade} />
+            <GradeEditForm gradeData={data} handleClose={handleClose} />
           )}
         </div>
       </div>

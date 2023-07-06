@@ -1,84 +1,47 @@
 /* eslint-disable no-case-declarations */
 'use client'
-
-import { api } from '@/app/lib/api'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SearchField from '../Common/SearchField'
 import Button from '../Common/Button'
-import { toast } from 'react-hot-toast'
 import { THead } from '../Common/THead'
 import { TBodySkeleton } from '../Common/TBodySkeleton'
-import { GradeType } from '@/app/types/grade'
 import { NewGradeModal } from './NewGradeModal'
 import { GradeTBody } from './GradeTBody'
 import GradeDetails from './GradeDetails'
+import { useQuery } from '@tanstack/react-query'
+import { GradeType } from '@/app/types/grade'
+import { getManyGrades } from '@/app/lib/grade/getManyGrades'
+import { SelectSubject } from '../Inputs/SelectSubject'
 
 export default function GradesAdminPage() {
-  const [openGradeModal, setOpenGradeModal] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [openModal, setOpenModal] = useState(false)
   const [currentOpenId, setCurrentOpenId] = useState('')
   const [queryName, setQueryName] = useState('')
-  const [grades, setGrades] = useState<GradeType[]>([])
+  const [subjectId, setSubjectId] = useState('')
 
-  async function getGrades(queryName: string) {
-    setLoading(true)
-    let tempGrades: GradeType[] = []
-
-    switch (true) {
-      case queryName !== '':
-        const { data: data4 } = await api.get(`/grade?name=${queryName}`)
-        tempGrades = data4.transformedGrades
-        break
-      case queryName === '':
-        const { data: data1 } = await api.get('/grade')
-        tempGrades = data1.transformedGrades
-        break
-      default:
-        break
-    }
-    setGrades(tempGrades)
-    setLoading(false)
-  }
-
-  async function createGrade(gradeData: any) {
-    async function postGrade() {
-      await api.post(`/grade`, gradeData)
-    }
-
-    try {
-      const myPromise = postGrade()
-      toast.promise(myPromise, {
-        loading: 'Cadastrando nota...',
-        success: 'Nota cadastrada!',
-        error: 'Houve um erro!',
-      })
-      await myPromise
-      setOpenGradeModal(false)
-      await getGrades('')
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getGrades(queryName)
-  }, [queryName])
+  const { data, isLoading } = useQuery<GradeType[]>({
+    queryKey: ['gradesList', { studentId: queryName, subjectId }],
+    queryFn: () => getManyGrades(queryName, subjectId),
+  })
 
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 mt-36 flex items-center justify-between gap-5">
         <SearchField value={queryName} onChange={setQueryName} />
+        <SelectSubject
+          value={subjectId}
+          onChange={(e) => setSubjectId(e.target.value)}
+        />
         <div className="w-full max-w-[150px]">
           <Button
-            onClick={() => setOpenGradeModal(true)}
+            onClick={() => setOpenModal(true)}
             type="button"
             value="Cadastrar Nota"
           />
-          {openGradeModal && (
+          {openModal && (
             <NewGradeModal
-              modalBoolean={openGradeModal}
-              setOpenModal={setOpenGradeModal}
-              createGrade={createGrade}
+              modalBoolean={openModal}
+              setOpenModal={setOpenModal}
             />
           )}
         </div>
@@ -90,21 +53,21 @@ export default function GradesAdminPage() {
               'Nome',
               'Turma',
               'Nota',
+              'Disciplina',
               'Frequência',
               'Status',
               'Detalhes',
             ]}
           />
-          {loading ? (
+          {isLoading ? (
             <TBodySkeleton />
           ) : (
-            <GradeTBody grades={grades} setCurrentOpenId={setCurrentOpenId} />
+            <GradeTBody grades={data} setCurrentOpenId={setCurrentOpenId} />
           )}
         </table>
         <GradeDetails
           detailsOpenId={currentOpenId}
           setDetailsOpenId={setCurrentOpenId}
-          updateTable={getGrades}
         />
       </div>
     </div>

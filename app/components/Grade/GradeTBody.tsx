@@ -3,7 +3,7 @@ import { GradeType } from '@/app/types/grade'
 import GradeRow from './GradeRow'
 
 interface GradeTBodyProps {
-  grades: GradeType[]
+  grades: GradeType[] | undefined
   setCurrentOpenId: Dispatch<SetStateAction<string>>
 }
 
@@ -14,11 +14,11 @@ export function GradeTBody({ grades, setCurrentOpenId }: GradeTBodyProps) {
         grades.map((grade: GradeType) => (
           <GradeRow
             key={grade.id}
-            id={grade.id}
-            grade={grade.grade}
-            frequency={grade.frequency}
-            student={grade.student}
-            subject={grade.subject}
+            id={grade?.id}
+            grade={grade?.grade}
+            frequency={grade?.frequency}
+            student={grade?.student}
+            subject={grade?.subject}
             setCurrentOpenId={setCurrentOpenId}
           />
         ))}

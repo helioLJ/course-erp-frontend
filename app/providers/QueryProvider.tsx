@@ -1,8 +1,11 @@
 'use client'
 import { ReactNode } from 'react'
-import { queryClient } from '../utils/queryClient'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } }, // 5 minutes
+})
 
 export function QueryProvider({ children }: { children: ReactNode }) {
   return (
